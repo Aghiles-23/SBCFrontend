@@ -38,7 +38,7 @@ function CreditCard() {
               minHeight: "600px",
               mt: 6,
               ":hover ": {
-                rotate: "0.1deg",
+                rotate: "1deg",
                 scale: "1.03",
                 transition: "0.4s",
               },
