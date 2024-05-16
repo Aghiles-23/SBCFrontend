@@ -15,10 +15,10 @@ import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { motion } from "framer-motion";
-import SendIcon from "@mui/icons-material/Send";
 import H1 from ".././components/header/H1";
-import H2 from ".././components/header/H2";
-import React from "react";
+import Search from ".././components/header/Search";
+import H3 from ".././components/header/H3";
+import React, { useState } from "react";
 
 import Dialog from "@mui/material/Dialog";
 
@@ -27,11 +27,13 @@ import BankDetails from "./BankDetails";
 import { useGetbankByNameQuery } from ".././Redux/bank";
 
 function App() {
-  const { data, error, isLoading } = useGetbankByNameQuery("banks?populate=*");
-  console.log(data);
+  const [MyData, setMyData] = useState(`banks?populate=*`);
+  const { data, error, isLoading } = useGetbankByNameQuery(MyData);
+  const [clickedBank, setclickedBank] = useState({});
 
   const [theme, colorMode] = useMode();
   const [open, setOpen] = React.useState(false);
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -75,12 +77,18 @@ function App() {
         value={colorMode}
       >
         <ThemeProvider
+          sx={{ backgroundColor: "#8888" }}
           // @ts-ignore
           theme={theme}
         >
           <CssBaseline />
           <H1 />
-          <H2 />
+          <H3 />
+          <Search
+            onSearch={(search) => {
+              setMyData(`banks?populate=*&filters[Title][$contains]=${search}`);
+            }}
+          />
           <Container>
             <Stack
               direction={"row"}
@@ -89,13 +97,16 @@ function App() {
             >
               {data.data.map((item) => (
                 <Card
-                  onClick={handleClickOpen}
+                  onClick={() => {
+                    handleClickOpen();
+                    setclickedBank(item);
+                  }}
                   key={item}
                   component={motion.section}
                   layout
                   initial={{ transform: "scale(0)" }}
-                  animate={{ transform: "scale(1)" }}
-                  transition={{ duration: 1.8, type: "spring", stiffness: 70 }}
+                  animate={{ transform: "scale(0.999)" }}
+                  transition={{ duration: 2, type: "spring", stiffness: 10 }}
                   sx={{
                     minWidth: "350px",
                     cursor: "pointer",
@@ -108,6 +119,10 @@ function App() {
                           theme.palette.bg.main,
                     maxWidth: 333,
                     mt: 6,
+                    ":hover": {
+                      transform: "scale(1.2)", // Agrandir la carte au survol
+                      transition: "0.4s",
+                    },
                     ":hover .MuiCardMedia-root": {
                       scale: "1.13",
                       transition: "0.4s",
@@ -133,17 +148,11 @@ function App() {
                     >
                       {item.attributes.Title}
                     </Typography>
-                    {/*<Typography variant="body2" color="inherit">
-                      {item.attributes.Description}
-                  </Typography>*/}
-                    {/*<a href={item.attributes.WebSite}> {item.attributes.WebSite} </a>*/}
                   </CardContent>
                   <CardActions>
                     <Button
-                      onClick={handleClickOpen}
-                      sx={{ borderWidth: "1.4px" }}
+                      sx={{ borderWidth: "1.45px", ml: 28 }}
                       variant="outlined"
-                      endIcon={<SendIcon />}
                     >
                       Voir Plus
                     </Button>
@@ -155,8 +164,9 @@ function App() {
             <Dialog
               sx={{
                 ".MuiPaper-root": {
-                  minWidth: { xs: "100%", md: "1000px" },
-                  minHeight: { xs: "50%", md: "60%" },
+                  minWidth: { xs: "100%", md: "700px" },
+                  minHeight: { xs: "40%", md: "40%" },
+                  maxWidth: { md: "800px" },
                 },
               }}
               open={open}
@@ -180,7 +190,7 @@ function App() {
                 <Close />
               </IconButton>
 
-              <BankDetails />
+              <BankDetails clickedBank={clickedBank} />
             </Dialog>
           </Container>
         </ThemeProvider>

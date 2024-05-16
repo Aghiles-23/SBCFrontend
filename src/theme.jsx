@@ -8,21 +8,25 @@ export const getDesignTokens = (mode) => ({
     ...(mode === "light"
       ? {
           // palette values for light mode
+
+
+
+          primary: {
+            main: "#068548", // Rouge
+          },
+
           text: {
             primary: "#2B3445",
           },
+          aghiles: { prim: "#000000" },
 
+          myColor: {
+            main: "#F9F9F9",
+          },
 
-
-
-        myColor: {
-          main: "#F6F9FC"
-        },
-
-        bg: {
-          main: "#F6F6F6"
-        },
-
+          bg: {
+            main: "#F6F6F6",
+          },
 
           neutral: {
             main: "#64748B",
@@ -31,17 +35,28 @@ export const getDesignTokens = (mode) => ({
           favColor: {
             main: grey[300],
           },
+
+          onglet: { main: "#068548" },
         }
       : {
           // palette values for dark mode
+
+
+
+          primary: {
+            main: "#068548", // Rouge
+          },
+
+
           text: {
             primary: "#fff",
           },
-
+          
+          aghiles: { prim: "#FFFFFF" },
           myColor: {
-            main: "#252b32"
+            main: "#16191C",
           },
-
+          onglet: { main: "#068548" },
           bg: {
             main: "#1D2021",
           },

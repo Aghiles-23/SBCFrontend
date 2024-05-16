@@ -1,44 +1,34 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import {
   Box,
   Container,
   Drawer,
   IconButton,
-  ListItemText,
   Stack,
-  Typography,
+  Tab,
+  Tabs,
   useMediaQuery,
-  useTheme,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUniversity, faTags } from "@fortawesome/free-solid-svg-icons";
 
 import MenuIcon from "@mui/icons-material/Menu";
-import WindowIcon from "@mui/icons-material/Window";
-import KeyboardArrowRightOutlinedIcon from "@mui/icons-material/KeyboardArrowRightOutlined";
 import { Close } from "@mui/icons-material";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
 
 const H3 = () => {
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
+  //const [, setAnchorEl] = useState(null);
+  const location = useLocation();
+  const [value, setValue] = useState("");
+  useEffect(() => {
+    setValue(location.pathname);
+  }, [location]);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
   };
 
-  const theme = useTheme();
   const [state, setState] = useState({
     top: false,
     left: false,
@@ -63,134 +53,48 @@ const H3 = () => {
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
-        mt: 2,
+        width: "100%",
+        mt: 6.7,
+        mb: 5,
       }}
     >
-      <Box>
-        <Button
-          id="basic-button"
-          aria-controls={open ? "basic-menu" : undefined}
-          aria-haspopup="true"
-          aria-expanded={open ? "true" : undefined}
-          onClick={handleClick}
-          sx={{
-            width: 222,
-            // @ts-ignore
-            bgcolor: theme.palette.myColor.main,
-            color: theme.palette.text.secondary,
-          }}
-        >
-          <WindowIcon />
-          <Typography
-            sx={{
-              padding: "0",
-              textTransform: "capitalize",
-              mx: 1,
-            }}
-          >
-            Categories
-          </Typography>
-          <Box flexGrow={1} />
-          <KeyboardArrowRightOutlinedIcon />
-        </Button>
-        <Menu
-          id="basic-menu"
-          anchorEl={anchorEl}
-          open={open}
-          onClose={handleClose}
-          MenuListProps={{
-            "aria-labelledby": "basic-button",
-          }}
-          sx={{
-            ".MuiPaper-root": {
-              width: 220,
-              // @ts-ignore
-              bgcolor: theme.palette.myColor.main,
-            },
-          }}
-        >
-          <MenuItem onClick={handleClose}>
-            <FontAwesomeIcon icon={faUniversity} />
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <Link
-              to="/banques"
-              style={{ textDecoration: "none", color: "inherit" }}
-            >
-              <ListItemText>Banques</ListItemText>
-            </Link>
-          </MenuItem>
-          <MenuItem onClick={handleClose}>
-            <FontAwesomeIcon icon={faTags} />
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <Link
-              to="/offres"
-              style={{ textDecoration: "none", color: "inherit" }}
-            >
-              <ListItemText>Offres</ListItemText>
-            </Link>{" "}
-          </MenuItem>
-        </Menu>
-      </Box>
-
       {useMediaQuery("(min-width:900px)") && (
-        <Stack
-          gap={16}
-          direction={"row"}
-          alignItems={"left"}
-          display={"flex"}
-          justifyContent={"space-between"}
-          mr="350px"
-        >
-          <Button
-            component={Link}
-            to="/"
+        <Box sx={{ width: "100%" }}>
+          <Tabs
+            value={value}
+            onChange={handleChange}
+            aria-label="secondary tabs example"
             sx={{
-              color: "inherit",
-              textDecoration: "none",
-              "&:hover": {
-                transform: "scale(1.2)",
-                backgroundColor: "#068548",
-                color: "#FFFFFF",
+              mt: 0,
+              ml: { sm: 5, md: 50 }, // Marge à gauche pour différents breakpoints
+              "& .MuiTab-root": {
+                fontFamily:"Acme",
+                // Appliquer des styles aux onglets individuels
+                fontWeight: 600, // Police en gras
+                fontSize: "14px", // Taille de la police
+                //textTransform: "none", // Pas de transformation de texte (tout en minuscules)
               },
+              "& .Mui-selected": {},
             }}
           >
-            Home
-          </Button>
-
-          <Button
-            component={Link}
-            to="/banques"
-            sx={{
-              color: "inherit",
-              textDecoration: "none",
-              "&:hover": {
-                transform: "scale(1.2)",
-                backgroundColor: "#068548",
-                color: "#FFFFFF",
-              },
-            }}
-          >
-            Banques
-          </Button>
-          <Button
-            component={Link}
-            to="/offres"
-            sx={{
-              textDecoration: "none",
-              color: "inherit",
-              "&:hover": {
-                transform: "scale(1.2)",
-                backgroundColor: "#068548",
-                color: "#FFFFFF",
-              },
-            }}
-          >
-            Offres
-          </Button>
-        </Stack>
+            <Tab value="/" label="Home" component={Link} to="/" />
+            <Tab
+              value="/banques"
+              label="Banques"
+              component={Link}
+              to="/banques"
+            />
+            <Tab
+              value="/offres"
+              label="Offres de crédit"
+              component={Link}
+              to="/offres"
+            />
+          </Tabs>
+        </Box>
       )}
 
-      {useMediaQuery("(max-width:1200px)") && (
+      {useMediaQuery("(max-width:900px)") && (
         <IconButton onClick={toggleDrawer("top", true)}>
           <MenuIcon />
         </IconButton>
@@ -203,11 +107,12 @@ const H3 = () => {
         sx={{
           ".MuiPaper-root.css-1sozasi-MuiPaper-root-MuiDrawer-paper": {
             height: "100%",
+            width: "100%",
           },
         }}
       >
         <Box
-          sx={{ width: 444, mx: "auto", mt: 6, position: "relative", pt: 10 }}
+          sx={{ width: "100%", mx: "auto", mt: 3, position: "relative", pt: 5 }}
         >
           <IconButton
             sx={{
@@ -221,35 +126,56 @@ const H3 = () => {
             <Close />
           </IconButton>
 
-          {[].map((item) => {
-            return (
-              <Accordion
-                key={item.mainLink}
-                elevation={0}
-                sx={{ bgcolor: "initial" }}
+          <Stack
+            direction={"column"}
+            alignItems={"center"}
+            display={"flex"}
+            justifyContent={"space-between"}
+          >
+            <Accordion
+              elevation={0}
+              // @ts-ignore
+              defaultExpanded="true"
+              sx={{ bgcolor: "inherit" }}
+            >
+              <AccordionSummary
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+              ></AccordionSummary>
+              <Button
+                component={Link}
+                to="/"
+                sx={{
+                  marginLeft: "35px",
+                  color: "inherit",
+                  textDecoration: "none",
+                }}
               >
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  aria-controls="panel1a-content"
-                  id="panel1a-header"
-                >
-                  <Typography>{item.mainLink}</Typography>
-                </AccordionSummary>
+                Home
+              </Button>
 
-                <List sx={{ py: 0, my: 0 }}>
-                  {item.subLinks.map((link) => {
-                    return (
-                      <ListItem key={link} sx={{ py: 0, my: 0 }}>
-                        <ListItemButton>
-                          <ListItemText primary={link} />
-                        </ListItemButton>
-                      </ListItem>
-                    );
-                  })}
-                </List>
-              </Accordion>
-            );
-          })}
+              <Button
+                component={Link}
+                to="/banques"
+                sx={{
+                  color: "inherit",
+                  textDecoration: "none",
+                }}
+              >
+                Banques
+              </Button>
+              <Button
+                component={Link}
+                to="/offres"
+                sx={{
+                  textDecoration: "none",
+                  color: "inherit",
+                }}
+              >
+                Offres de crédit
+              </Button>
+            </Accordion>
+          </Stack>
         </Box>
       </Drawer>
     </Container>
