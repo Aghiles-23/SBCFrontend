@@ -95,7 +95,12 @@ const H1 = () => {
           >
             {useMediaQuery("(min-width:500px ) ") && (
               <Typography
-                sx={{ fontWeight: 600, fontSize: "12px", fontFamily: "Acme" }}
+                sx={{
+                  fontWeight: 600,
+                  fontSize: "12px",
+                  fontFamily: "Acme",
+                  textDecoration: "none",
+                }}
               >
                 Se connecter
               </Typography>

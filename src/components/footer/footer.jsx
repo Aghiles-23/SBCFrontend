@@ -17,8 +17,9 @@ const Footer = () => {
       sx={{
         // @ts-ignore
         bgcolor: theme.palette.aghiles.prim,
-        py: 1.3,
+        py: 4.3,
         height: "100%",
+        mt:3
       }}
     >
       {useMediaQuery("(min-width:900px)") && (
@@ -124,7 +125,7 @@ const Footer = () => {
                 variant="body2"
               >
                 Banques
-              </Typography>{" "}
+              </Typography>
             </Button>
             <Button component={Link} to="/offres">
               <Typography

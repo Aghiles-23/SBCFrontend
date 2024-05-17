@@ -13,7 +13,6 @@ import {
 import { ColorModeContext, useMode } from ".././theme";
 //import { Outlet } from "react-router-dom";
 import H1 from ".././components/header/H1";
-import Footer from ".././components/footer/footer";
 import { useNavigate } from "react-router-dom";
 
 import HomeIcon from "@mui/icons-material/Home";
@@ -30,7 +29,7 @@ function App() {
     navigate(lien); // La route vers laquelle vous souhaitez naviguer
   };
   /* const [open, setOpen] = React.useState(false);
-  const [clickedCategorie, setclickedCategorie] = useState({});*/
+    const [clickedCategorie, setclickedCategorie] = useState({});*/
 
   const [theme, colorMode] = useMode();
   const [value, setValue] = React.useState("one");
@@ -388,8 +387,6 @@ function App() {
             </Card>{" "}
           </Grid>
         </Grid>
-
-        <Footer />
       </ThemeProvider>
     </ColorModeContext.Provider>
   );

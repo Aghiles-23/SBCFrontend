@@ -3,6 +3,7 @@ import {
   CircularProgress,
   Container,
   CssBaseline,
+  Grid,
   IconButton,
   Stack,
   ThemeProvider,
@@ -25,6 +26,7 @@ import Dialog from "@mui/material/Dialog";
 import { Close } from "@mui/icons-material";
 import BankDetails from "./BankDetails";
 import { useGetbankByNameQuery } from ".././Redux/bank";
+import Footer from ".././components/footer/footer";
 
 function App() {
   const [MyData, setMyData] = useState(`banks?populate=*`);
@@ -108,7 +110,7 @@ function App() {
                   animate={{ transform: "scale(0.999)" }}
                   transition={{ duration: 2, type: "spring", stiffness: 10 }}
                   sx={{
-                    minWidth: "350px",
+                    minWidth: "300px",
                     cursor: "pointer",
                     backgroundColor:
                       // @ts-ignore
@@ -117,7 +119,7 @@ function App() {
                           theme.palette.myColor.main
                         : // @ts-ignore
                           theme.palette.bg.main,
-                    maxWidth: 333,
+                    maxWidth: "320px",
                     mt: 6,
                     ":hover": {
                       transform: "scale(1.2)", // Agrandir la carte au survol
@@ -143,19 +145,45 @@ function App() {
                       gutterBottom
                       variant="h6"
                       component="div"
+
                       // @ts-ignore
-                      sx={{ color: theme.palette.text.primary }}
+                      sx={{ color: theme.palette.text.primary,mb:5 }}
                     >
                       {item.attributes.Title}
                     </Typography>
                   </CardContent>
                   <CardActions>
-                    <Button
-                      sx={{ borderWidth: "1.45px", ml: 28 }}
-                      variant="outlined"
+                    <Grid
+                      container
+                      justifyContent="flex-end" // Alignement à droite
+                      alignItems="flex-end" // Alignement en bas
+                      sx={{ position: "absolute", bottom: 4, right: 4 }} // Positionnement absolu en bas à droite
                     >
-                      Voir Plus
-                    </Button>
+                      <Button
+                        sx={{
+                          borderWidth: "1.5px",
+                          borderRadius: "10px",
+                          textDecoration: "none",
+                          "&:hover": {
+                            backgroundColor: "#45a049", // Couleur de fond au survol
+                            color: "white",
+                            borderColor: "#068548",
+                          },
+                        }}
+                        variant="outlined"
+                      >
+                        <Typography
+                          sx={{
+                            fontWeight: 600,
+                            fontSize: "14px",
+                            fontFamily: "Acme",
+                            textDecoration: "none",
+                          }}
+                        >
+                          Voir Plus
+                        </Typography>
+                      </Button>
+                    </Grid>
                   </CardActions>
                 </Card>
               ))}
@@ -193,6 +221,7 @@ function App() {
               <BankDetails clickedBank={clickedBank} />
             </Dialog>
           </Container>
+          <Footer />
         </ThemeProvider>
       </ColorModeContext.Provider>
     );
