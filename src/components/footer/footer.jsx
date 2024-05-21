@@ -19,7 +19,7 @@ const Footer = () => {
         bgcolor: theme.palette.aghiles.prim,
         py: 4.3,
         height: "100%",
-        mt:3
+        mt: 3,
       }}
     >
       {useMediaQuery("(min-width:900px)") && (
@@ -46,9 +46,8 @@ const Footer = () => {
                   ml: 1,
                   fontSize: "36px",
                   fontWeight: 900,
-                  //color: theme.palette.text.main,
+                  fontFamily: "Acme",
                   cursor: "pointer",
-                  // Définissez le curseur ici si vous souhaitez qu'il soit pointer
                 }}
                 variant="body2"
               >
@@ -88,6 +87,67 @@ const Footer = () => {
               sx={{
                 fontSize: "24px",
                 fontWeight: 800,
+                fontFamily: "Acme",
+                // @ts-ignore
+                color: "#068548",
+                mt: 3,
+                mb: 1.5,
+              }}
+              variant="body2"
+            >
+              Onglets
+            </Typography>
+            <Button component={Link} to="/">
+              <Typography
+                sx={{
+                  fontSize: "14px",
+                  fontWeight: 400,
+                  // @ts-ignore
+                  color: theme.palette.myColor.main,
+                }}
+                variant="body2"
+              >
+                Home
+              </Typography>{" "}
+            </Button>
+            <Button
+              component={Link}
+              to="/banques"
+              sx={{ color: theme.palette.text.primary }}
+            >
+              <Typography
+                sx={{
+                  fontSize: "14px",
+                  fontWeight: 400,
+                  // @ts-ignore
+                  color: theme.palette.myColor.main,
+                }}
+                variant="body2"
+              >
+                Banques
+              </Typography>
+            </Button>
+            <Button component={Link} to="/offres">
+              <Typography
+                sx={{
+                  textDecoration: "none",
+                  fontSize: "14px",
+                  fontWeight: 400,
+                  // @ts-ignore
+                  color: theme.palette.myColor.main,
+                }}
+                variant="body2"
+              >
+                Offres de crédit
+              </Typography>
+            </Button>
+          </Stack>
+          <Stack direction={"column"} alignItems={"center"} display={"flex"}>
+            <Typography
+              sx={{
+                fontSize: "24px",
+                fontWeight: 800,
+                fontFamily: "Acme",
                 // @ts-ignore
                 color: "#068548",
                 mt: 3,
@@ -124,7 +184,7 @@ const Footer = () => {
                 }}
                 variant="body2"
               >
-                Banques
+                Consultation banques
               </Typography>
             </Button>
             <Button component={Link} to="/offres">
@@ -137,7 +197,7 @@ const Footer = () => {
                 }}
                 variant="body2"
               >
-                Offres de credit
+                Offres de crédit
               </Typography>
             </Button>
           </Stack>
@@ -146,6 +206,7 @@ const Footer = () => {
               sx={{
                 fontSize: "24px",
                 fontWeight: 800,
+                fontFamily: "Acme",
                 // @ts-ignore
                 color: "#068548",
                 mt: 3,
@@ -224,11 +285,9 @@ const Footer = () => {
                   mb: 2,
                   mr: 9,
                   fontSize: "36px",
-                  fontFamily: "Acme",
                   fontWeight: 900,
-                  //color: theme.palette.text.main,
+                  fontFamily: "Acme",
                   cursor: "pointer",
-                  // Définissez le curseur ici si vous souhaitez qu'il soit pointer
                 }}
                 variant="body2"
               >
@@ -317,7 +376,7 @@ const Footer = () => {
                 }}
                 variant="body2"
               >
-                Offres de credit
+                Offres de crédit
               </Typography>
             </Button>
           </Stack>

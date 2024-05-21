@@ -1,260 +1,313 @@
 import {
   Box,
   Button,
-  Container,
+  CssBaseline,
   Stack,
+  ThemeProvider,
   Typography,
   useMediaQuery,
-  useTheme,
 } from "@mui/material";
+import H3 from "../../components/header/Tabs";
+import About from "./Apropos";
+import Services from "./Services";
 
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/pagination";
 import "./slider.css";
 import { Link } from "react-router-dom";
+import { ColorModeContext, useMode } from "../../theme";
 
 const Hero = () => {
-  const theme = useTheme();
-  const isScreenSmall = useMediaQuery("(max-width: 600px)");
+  const [theme, colorMode] = useMode();
+
+  //const isScreenSmall = useMediaQuery("(max-width: 600px)");
   return (
-    <Container>
-      {useMediaQuery("(min-width:1000px)") && (
-        <Box
+    <ColorModeContext.Provider
+      // @ts-ignore
+      value={colorMode}
+    >
+      <ThemeProvider
+        sx={{ backgroundColor: "#8888" }}
+        // @ts-ignore
+        theme={theme}
+      >
+        <CssBaseline />
+        <Stack
+          //className="border"
           sx={{
-            display: "flex",
-            justifyContent: "space-between", // Pour aligner les éléments sur les côtés
-            alignItems: "center", // Pour aligner les éléments verticalement
-            gap: 2, // Espacement entre les deux éléments
-            paddingTop: 2,
-            marginTop: 2.5,
-            marginBottom: 10,
+            position: "relative",
+            width: "100%",
+            height: "700px",
+            // marginBottom: 10,
+            overflowX: "hidden" /* Masque le contenu qui dépasse */,
           }}
         >
-          <Box
-            sx={{
-              width: "50%", // Pour occuper l'autre moitié de la largeur du conteneur
-              paddingLeft: { xs: 2, sm: 4 }, // Ajustements de la marge à gauche selon la taille de l'écran
-              textAlign: { xs: "center", sm: "left" }, // Pour aligner le texte au centre sur les petits écrans et à gauche sur les grands écrans
-            }}
-          >
-            <Typography
+          {useMediaQuery("(min-width:1100px)") && (
+            <Box
               sx={{
-                fontWeight: 800,
-
-                // @ts-ignore
-                color: theme.palette.text.main,
-              }}
-              variant="h2"
-            >
-              Simplifier Vos Choix Bancaires
-            </Typography>
-
-            <Stack direction="row" alignItems="center" mt={3}>
-              <Typography
-                variant="h6"
-                sx={{
-                  fontWeight: 500,
-                  color:
-                    // @ts-ignore
-                    theme.palette.text.main,
-                }}
-              >
-                Trouvez les meilleurs tarifs et offres dans tout le pays <br />
-                <br />
-              </Typography>
-            </Stack>
-
-            <Stack sx={{ mt: 3, display: "block", alignContent: "center" , }}>
-              <Button
-              className="myButton"
-                variant="contained"
-                sx={{
-                  fontFamily:"Acme",
-                  height: "40px",
-                  width: "150px",
-                  backgroundColor: "#068548",
-                  borderRadius: "7px",
-                  color: "white",
-
-                  "&:hover": {
-                    backgroundColor: "#45a049",
-                    // @ts-ignore
-                    color: theme.palette.text.main,
-                  },
-                }}
-              >
-                Comparer
-              </Button>
-              <Button
-              className="myButton"
-                component={Link}
-                to="/offres"
-                variant="outlined"
-                sx={{
-                  ml: "30px",
-                  height: "40px",
-                  width: "250px",
-                  color: "#068548",
-                  fontWeight: 540,
-                  borderRadius: "7px",
-                  borderColor: "#068548",
-                 // textDecoration:"none",
-                  fontFamily:"Acme",
-
-                  "&:hover": {
-                    backgroundColor: "#45a049", // Couleur de fond au survol
-                    color: "white",
-                    borderColor: "#068548",
-                  },
-                }}
-              >
-                Afficher les Offres
-              </Button>
-            </Stack>
-          </Box>
-          <Box
-            sx={{
-              width: "50%", // Pour occuper la moitié de la largeur du conteneur
-              position: "relative",
-              maxHeight: "1000px",
-              overflow: "hidden",
-            }}
-          >
-            <img
-              src="src/components/img/Home.jpg"
-              alt=""
-              style={{
+                position: "relative",
                 width: "100%",
-                height: "auto",
-                display: "block",
-              }}
-            />
-          </Box>
-        </Box>
-      )}
-      {useMediaQuery("(max-width:1000px ) ") && (
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between", // Pour aligner les éléments sur les côtés
-            alignItems: "center", // Pour aligner les éléments verticalement
-            gap: 2, // Espacement entre les deux éléments
-            paddingTop: 2,
-            marginTop: 2.5,
-            marginBottom: 10,
-          }}
-        >
-          <Box
-            sx={{
-              width: "50%", // Pour occuper l'autre moitié de la largeur du conteneur
-              paddingLeft: { xs: 2, sm: 4 }, // Ajustements de la marge à gauche selon la taille de l'écran
-              textAlign: { xs: "center", sm: "left" }, // Pour aligner le texte au centre sur les petits écrans et à gauche sur les grands écrans
-            }}
-          >
-            <Typography
-              sx={{
-                fontWeight: 800,
+                height: "700px",
+                overflow: "hidden" /* Masque le contenu qui dépasse */,
 
-                // @ts-ignore
-                color: theme.palette.text.main,
+                //marginBottom: 10,
               }}
-              variant="h4"
             >
-              Simplifier Vos Choix Bancaires
-            </Typography>
+              <H3 />
+              <img
+                src="src/components/img/Home5.jpg"
+                alt=""
+                style={{
+                  width: "100%",
+                  height: "810px",
+                  objectFit: "cover",
+                  position: "absolute",
+                  overflowY: "hidden" /* Masque le contenu qui dépasse */,
 
-            <Stack direction="row" alignItems="center" mt={3}>
-              <Typography
-                variant="h6"
+                  top: 0,
+                  left: 0,
+                  zIndex: -1,
+                  // opacity: 800.5, // Ensure the image is behind the H3 component
+                }}
+              />
+              <Box
                 sx={{
-                  fontWeight: 400,
-                  color:
-                    // @ts-ignore
-                    theme.palette.text.main,
+                  width: "50%",
+                  paddingLeft: { xs: 2, sm: 10 },
+                  textAlign: { xs: "center", sm: "left" },
+                  paddingTop: 10,
                 }}
               >
-                Trouvez les meilleurs tarifs et offres dans tout le pays <br />
-                <br />
-              </Typography>
-            </Stack>
+                <Typography
+                  sx={{
+                    fontWeight: 800,
+                    // @ts-ignore
+                    color: theme.palette.dark.main,
+                  }}
+                  variant="h3"
+                >
+                  Simplifier Vos Choix Bancaires
+                </Typography>
 
+                <Stack direction="row" alignItems="center" mt={3}>
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      mt: 1,
+                      mb: 5,
+                      fontWeight: 400,
+                      fontFamily: "Outfit",
+                      // @ts-ignore
+                      color: theme.palette.dark.main,
+                    }}
+                  >
+                    Avec SmartBankChoice, il est plus facile de trouver et de
+                    comparer les meilleurs tarifs et offres bancaires dans tout
+                    le pays. <br />
+                  </Typography>
+                </Stack>
+
+                <Stack
+                  sx={{
+                    mt: 3,
+                    display: "block",
+                    alignContent: "center",
+                  }}
+                >
+                  <Button
+                    className="Buttonpref"
+                    variant="contained"
+                    sx={{
+                      fontFamily: "Acme",
+                      height: "40px",
+                      width: "200px",
+                      backgroundColor: "#068548",
+                      borderRadius: "7px",
+                      color: "white",
+
+                      "&:hover": {
+                        backgroundColor: "#068548",
+                        // @ts-ignore
+                        color: theme.palette.white.main,
+                      },
+                    }}
+                  >
+                    Comparer les offres
+                  </Button>
+                  <Button
+                    className="ButtonPref"
+                    component={Link}
+                    to="/offres"
+                    variant="outlined"
+                    sx={{
+                      ml: "30px",
+                      height: "40px",
+                      width: "230px",
+                      color: "#068548",
+                      fontWeight: 540,
+                      borderRadius: "7px",
+                      borderColor: "#068548",
+                      fontFamily: "Acme",
+
+                      "&:hover": {
+                        backgroundColor: "#068548",
+                        color: "#FFFFFF",
+                        borderColor: "#068548",
+                      },
+                    }}
+                  >
+                    Consulter les Offres
+                  </Button>
+                </Stack>
+              </Box>
+            </Box>
+          )}
+          {useMediaQuery("(max-width:1100px ) ") && (
             <Stack
-              direction={"column"}
-              alignItems={"center"}
-              display={"flex"}
-              justifyContent={"space-between"}
+              // className="border"
               sx={{
-                mt: 3,
                 display: "flex",
-                 alignContent: "center",
-               }}
-            >
-              <Button
-                variant="contained"
-                sx={{
-                  height: "40px",
-                  width: "150px",
-                  backgroundColor: "#068548",
-                  borderRadius: "7px",
-                  color: "white",
-                  mb:2,
-
-                  "&:hover": {
-                    backgroundColor: "#45a049",
-                    // @ts-ignore
-                    color: theme.palette.text.main,
-                  },
-                }}
-              >
-                Comparer
-              </Button>
-              <Button
-                component={Link}
-                to="/offres"
-                variant="outlined"
-                sx={{
-                  ml: "30px",
-                  height: "40px",
-                  width: "250px",
-                  color: "#068548",
-                  fontWeight: 540,
-                  borderRadius: "7px",
-                  borderColor: "#068548",
-
-                  "&:hover": {
-                    backgroundColor: "#45a049", // Couleur de fond au survol
-                    color: "white",
-                    borderColor: "#068548",
-                  },
-                }}
-              >
-                Afficher les Offres
-              </Button>
-            </Stack>
-          </Box>
-          {!isScreenSmall && (
-          <Box
-            sx={{
-              width: "50%", // Pour occuper la moitié de la largeur du conteneur
-              position: "relative",
-              maxHeight: "1000px",
-              overflow: "hidden",
-            }}
-          >
-            <img
-              src="src/components/img/Home.jpg"
-              alt=""
-              style={{
                 width: "100%",
-                height: "100%",
-                display: "block",
+                height: "50%",
+
+                // marginBottom: 10,
               }}
-            />
-          </Box>)}
-        </Box>
-      )}
-    </Container>
+            >
+              {" "}
+              <H3 />
+              <Box
+                sx={{
+                  width: "100%",
+                  height: "500px",
+                  paddingLeft: { xs: 0, sm: 4 },
+                  textAlign: { xs: "center", sm: "left" },
+                  // mt: 10,
+                }}
+              >
+                <img
+                  src="src/components/img/Home5.jpg"
+                  alt=""
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    position: "absolute",
+                    overflowY: "hidden" /* Masque le contenu qui dépasse */,
+
+                    top: 0,
+                    left: 0,
+                    zIndex: -1,
+                    // opacity: 800.5, // Ensure the image is behind the H3 component
+                  }}
+                />
+
+                <Box
+                  sx={{
+                    width: "30%",
+                    ml: 3,
+                    paddingLeft: { xs: 0 },
+                    textAlign: { xs: "left", sm: "left" },
+                    //mb: 50,
+                    //paddingTop: 1,
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      mt: { xs: 0, sm: 3 },
+                      fontWeight: 800,
+                      // @ts-ignore
+                      color: theme.palette.text.main,
+                    }}
+                    variant="h4"
+                  >
+                    Simplifier Vos Choix Bancaires
+                  </Typography>
+
+                  <Stack direction="row" alignItems="center" mt={3}>
+                    <Typography
+                      //variant="h6"
+                      sx={{
+                        fontSize: { xs: "15px", sm: "19px" },
+                        mt: 1,
+                        mb: 5,
+                        fontWeight: 400,
+                        fontFamily: "Outfit",
+                        // @ts-ignore
+                        color: theme.palette.text.main,
+                      }}
+                    >
+                      &nbsp;&nbsp;&nbsp;&nbsp;Avec SmartBankChoice, il est plus
+                      facile de trouver et de comparer les meilleurs tarifs et
+                      offres bancaires dans tout le pays. <br />
+                    </Typography>
+                  </Stack>
+
+                  <Stack
+                    sx={{
+                      mt: 3,
+                      display: "block",
+                      alignContent: "center",
+                      justifyContent: "center",
+                      direction: "column",
+                      gap: 3,
+                    }}
+                  >
+                    <Button
+                      className="Buttonpref"
+                      variant="contained"
+                      sx={{
+                        fontFamily: "Acme",
+                        height: "40px",
+                        width: "200px",
+                        backgroundColor: "#068548",
+                        borderRadius: "7px",
+                        color: "white",
+                        mb: 1,
+
+                        "&:hover": {
+                          backgroundColor: "#068548",
+                          // @ts-ignore
+                          color: theme.palette.text.main,
+                        },
+                      }}
+                    >
+                      Comparer les offres
+                    </Button>
+                    <Button
+                      className="ButtonPref"
+                      component={Link}
+                      to="/offres"
+                      variant="outlined"
+                      sx={{
+                        ml: { l: "30px" },
+                        height: "40px",
+                        width: "200px",
+                        color: "#068548",
+                        fontWeight: 540,
+                        borderRadius: "7px",
+                        borderColor: "#068548",
+                        fontFamily: "Acme",
+
+                        "&:hover": {
+                          backgroundColor: "#068548",
+                          color: "#FFFFFF",
+                          borderColor: "#068548",
+                        },
+                      }}
+                    >
+                      Consulter les Offres
+                    </Button>
+                  </Stack>
+                </Box>
+              </Box>
+            </Stack>
+          )}
+        </Stack>
+        <About />
+        <Services/>
+      </ThemeProvider>
+    </ColorModeContext.Provider>
   );
 };
 

@@ -4,18 +4,35 @@ import {
   Box,
   Button,
   Container,
+  Dialog,
   IconButton,
   Stack,
   Typography,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { DarkModeOutlined, LightModeOutlined } from "@mui/icons-material";
+import {
+  Close,
+  DarkModeOutlined,
+  LightModeOutlined,
+} from "@mui/icons-material";
 import SignUpIcon from "@mui/icons-material/Login";
+import { Link } from "react-router-dom";
+import React from "react";
+import Login from "../../Pages/Authentification/Login";
 
 const H1 = () => {
   const colorMode = useContext(ColorModeContext);
   const theme = useTheme();
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
   //const [anchorEl, setAnchorEl] = useState(null);
   // const [selectedIndex, setSelectedIndex] = useState(1);
 
@@ -85,11 +102,18 @@ const H1 = () => {
           <Button
             variant="contained"
             className="myButton"
+            component={Link}
+            to="/login"
+            onClick={handleClickOpen}
             sx={{
               backgroundColor: "#FFF9F9",
               color: "#068548",
-
               ml: 2,
+              "&:hover": {
+                backgroundColor: "#068548",
+                // @ts-ignore
+                color: "#ffffff",
+              },
             }}
             startIcon={<SignUpIcon />}
           >
@@ -106,6 +130,37 @@ const H1 = () => {
               </Typography>
             )}
           </Button>
+
+          <Dialog
+            sx={{
+              ".MuiPaper-root": {
+                minWidth: { xs: "50%", md: "27%" },
+                minHeight: { xs: "auto", md: "auto" },
+                maxWidth: { md: "800px" },
+              },
+            }}
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <IconButton
+              sx={{
+                ":hover": {
+                  color: "red",
+                  rotate: "180deg",
+                  transition: "0.3s",
+                },
+                position: "absolute",
+                top: 0,
+                right: 10,
+              }}
+              onClick={handleClose}
+            >
+              <Close />
+            </IconButton>
+            <Login />
+          </Dialog>
         </Stack>
       </Container>
     </Box>

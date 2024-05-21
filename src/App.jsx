@@ -5,14 +5,19 @@ import { ColorModeContext, useMode } from "./theme";
 
 import Home from "./Pages/Home";
 import { Route, Routes } from "react-router-dom";
-import Banques from "./Pages/Banques";
-import Offres from "./Pages/Offres";
-import CreditCard from "./Offres/CreditCard";
-import Automobile from "./Offres/Automobile";
+import Banques from "./Pages/Banques/Banques";
+//import Login from "./Pages/Authentification/Login";
+import SignUp from "./Pages/Authentification/SignUp";
+import Offres from "./Pages/Offres/OffresGeneral";
+import CreditCard from "./Pages/Offres/Particulier/CreditCard";
+import Credit from "./Pages/Offres/Particulier/CreditCard";
+
+import Automobile from "./Pages/Offres/Particulier/Automobile";
 /*import Moto from "./Offres/Moto";
 import Immobilier from "./Offres/Immobilier";
 import Consommation from "./Offres/Consommation";*/
 import ScrollToTop from "./components/Scroll/ScrollToTop";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -29,17 +34,16 @@ function App() {
         <ScrollToTop />
         <Routes>
           <Route path="/" element={<Home />}></Route>
+          <Route path="/login" element={<Home />}></Route>
+          <Route path="/signup" element={<SignUp />}></Route>
           <Route path="/banques" element={<Banques />}></Route>
           <Route path="/offres" element={<Offres />}></Route>
           <Route path="/offres/cartecredit" element={<CreditCard />}></Route>
+          <Route path="/offres/cartecredit" element={<Credit />}></Route>
+
           <Route path="/offres/automobile" element={<Automobile />}></Route>
-          {/*  <Route path="/offres/immobilier" element={<Immobilier />}></Route>
-          <Route path="/offres/moto" element={<Moto />}></Route>
-          <Route
-            path="/offres/creditconsommation"
-            element={<Consommation />}
-  ></Route>*/}
         </Routes>
+        <ToastContainer />
       </ThemeProvider>
     </ColorModeContext.Provider>
   );

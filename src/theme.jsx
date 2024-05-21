@@ -7,8 +7,12 @@ export const getDesignTokens = (mode) => ({
     mode,
     ...(mode === "light"
       ? {
-          // palette values for light mode
+          // palette values for light mode"
 
+          green: { main: "#068548" },
+          dark:{main:"#2B3445"},
+          drawer: { main: "#000000" },
+          white: { main: "#FFFFFF" },
           primary: {
             main: "#068548", // Rouge
           },
@@ -35,13 +39,19 @@ export const getDesignTokens = (mode) => ({
           },
 
           onglet: { main: "#068548" },
-          elementCard:{primary:"#8B1123"}
+          elementCard: { primary: "#231142" },
         }
       : // palette values for dark mode
 
         {
+          dark:{main:"#2B3445"},
 
-          elementCard:{primary:"#FFFFFF"},
+          green: { main: "#068548" },
+
+          drawer: { main: "#FFFFFF" },
+
+          white: { main: "#FFFFFF" },
+          elementCard: { primary: "#FFFFFF" },
 
           primary: {
             main: "#068548", // Rouge
