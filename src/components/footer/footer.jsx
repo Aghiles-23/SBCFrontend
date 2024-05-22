@@ -12,6 +12,12 @@ import TelIcon from "@mui/icons-material/Phone";
 
 const Footer = () => {
   const theme = useTheme();
+  const handleScroll = (id) => {
+    const section = document.getElementById(id);
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth" });
+    }
+  };
   return (
     <Box
       sx={{
@@ -30,30 +36,22 @@ const Footer = () => {
           justifyContent={"space-between"}
         >
           <Box sx={{ ml: 7 }}>
-            <a
-              href="/"
-              style={{
-                textDecoration: "none",
+            <Typography
+              sx={{
+                mt: "20%",
+                mb: 2,
+                ml: 1,
+                fontSize: "36px",
+                fontWeight: 900,
+                fontFamily: "Acme",
                 cursor: "pointer",
                 // @ts-ignore
                 color: theme.palette.myColor.main,
               }}
+              onClick={() => handleScroll("home")}
             >
-              <Typography
-                sx={{
-                  mt: "20%",
-                  mb: 2,
-                  ml: 1,
-                  fontSize: "36px",
-                  fontWeight: 900,
-                  fontFamily: "Acme",
-                  cursor: "pointer",
-                }}
-                variant="body2"
-              >
-                SmartBankChoice
-              </Typography>
-            </a>
+              SmartBankChoice
+            </Typography>
             <Typography
               sx={{
                 fontSize: "16px",
@@ -80,7 +78,6 @@ const Footer = () => {
               © 2024 SmartBankChoice
             </Typography>
           </Box>
-          <Box></Box>
 
           <Stack direction={"column"} alignItems={"center"} display={"flex"}>
             <Typography
@@ -88,7 +85,6 @@ const Footer = () => {
                 fontSize: "24px",
                 fontWeight: 800,
                 fontFamily: "Acme",
-                // @ts-ignore
                 color: "#068548",
                 mt: 3,
                 mb: 1.5,
@@ -97,7 +93,7 @@ const Footer = () => {
             >
               Onglets
             </Typography>
-            <Button component={Link} to="/">
+            <Button onClick={() => handleScroll("home")}>
               <Typography
                 sx={{
                   fontSize: "14px",
@@ -110,11 +106,7 @@ const Footer = () => {
                 Home
               </Typography>{" "}
             </Button>
-            <Button
-              component={Link}
-              to="/banques"
-              sx={{ color: theme.palette.text.primary }}
-            >
+            <Button onClick={() => handleScroll("about")}>
               <Typography
                 sx={{
                   fontSize: "14px",
@@ -124,10 +116,10 @@ const Footer = () => {
                 }}
                 variant="body2"
               >
-                Banques
+                A propos de nous
               </Typography>
             </Button>
-            <Button component={Link} to="/offres">
+            <Button onClick={() => handleScroll("services")}>
               <Typography
                 sx={{
                   textDecoration: "none",
@@ -138,7 +130,21 @@ const Footer = () => {
                 }}
                 variant="body2"
               >
-                Offres de crédit
+                Services
+              </Typography>
+            </Button>
+            <Button onClick={() => handleScroll("BankLogoSec")}>
+              <Typography
+                sx={{
+                  textDecoration: "none",
+                  fontSize: "14px",
+                  fontWeight: 400,
+                  // @ts-ignore
+                  color: theme.palette.myColor.main,
+                }}
+                variant="body2"
+              >
+                Nos partenaires
               </Typography>
             </Button>
           </Stack>
@@ -148,7 +154,6 @@ const Footer = () => {
                 fontSize: "24px",
                 fontWeight: 800,
                 fontFamily: "Acme",
-                // @ts-ignore
                 color: "#068548",
                 mt: 3,
                 mb: 1.5,
@@ -170,11 +175,7 @@ const Footer = () => {
                 Home
               </Typography>{" "}
             </Button>
-            <Button
-              component={Link}
-              to="/banques"
-              sx={{ color: theme.palette.text.primary }}
-            >
+            <Button component={Link} to="/banques">
               <Typography
                 sx={{
                   fontSize: "14px",
@@ -184,7 +185,7 @@ const Footer = () => {
                 }}
                 variant="body2"
               >
-                Consultation banques
+                banques
               </Typography>
             </Button>
             <Button component={Link} to="/offres">
@@ -207,7 +208,6 @@ const Footer = () => {
                 fontSize: "24px",
                 fontWeight: 800,
                 fontFamily: "Acme",
-                // @ts-ignore
                 color: "#068548",
                 mt: 3,
                 mb: 2.5,
@@ -262,6 +262,7 @@ const Footer = () => {
           <Box></Box>
         </Stack>
       )}
+      ,
       {useMediaQuery("(max-width:900px)") && (
         <Stack
           direction={"column"}
@@ -320,7 +321,75 @@ const Footer = () => {
               © 2024 SmartBankChoice
             </Typography>
           </Box>
-          <Box></Box>
+          <Stack direction={"column"} alignItems={"center"} display={"flex"}>
+            <Typography
+              sx={{
+                fontSize: "24px",
+                fontWeight: 800,
+                fontFamily: "Acme",
+                color: "#068548",
+                mt: 3,
+                mb: 1.5,
+              }}
+              variant="body2"
+            >
+              Onglets
+            </Typography>
+            <Button onClick={() => handleScroll("home")}>
+              <Typography
+                sx={{
+                  fontSize: "14px",
+                  fontWeight: 400,
+                  // @ts-ignore
+                  color: theme.palette.myColor.main,
+                }}
+                variant="body2"
+              >
+                Home
+              </Typography>{" "}
+            </Button>
+            <Button onClick={() => handleScroll("about")}>
+              <Typography
+                sx={{
+                  fontSize: "14px",
+                  fontWeight: 400,
+                  // @ts-ignore
+                  color: theme.palette.myColor.main,
+                }}
+                variant="body2"
+              >
+                A propos de nous
+              </Typography>
+            </Button>
+            <Button onClick={() => handleScroll("services")}>
+              <Typography
+                sx={{
+                  textDecoration: "none",
+                  fontSize: "14px",
+                  fontWeight: 400,
+                  // @ts-ignore
+                  color: theme.palette.myColor.main,
+                }}
+                variant="body2"
+              >
+                Services
+              </Typography>
+            </Button>
+            <Button onClick={() => handleScroll("BankLogoSec")}>
+              <Typography
+                sx={{
+                  textDecoration: "none",
+                  fontSize: "14px",
+                  fontWeight: 400,
+                  // @ts-ignore
+                  color: theme.palette.myColor.main,
+                }}
+                variant="body2"
+              >
+                Nos partenaires
+              </Typography>
+            </Button>
+          </Stack>
 
           <Stack direction={"column"} alignItems={"center"} display={"flex"}>
             <Typography
@@ -352,6 +421,7 @@ const Footer = () => {
             <Button
               component={Link}
               to="/banques"
+              // @ts-ignore
               sx={{ color: theme.palette.text.primary }}
             >
               <Typography
@@ -441,7 +511,9 @@ const Footer = () => {
         </Stack>
       )}
     </Box>
+    // @ts-ignore
   );
+  // @ts-ignore
 };
 
 export default Footer;

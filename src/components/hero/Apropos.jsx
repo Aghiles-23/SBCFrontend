@@ -21,12 +21,13 @@ const Apropos = () => {
       >
         <CssBaseline />
         <Stack
+        
          // className="border"
           sx={{
             width: "100%",
             height: "800px",
             ml: 0,
-            mb: 10,
+            mb:-40,
             // mt: 10,
             paddingLeft: { xs: 0 },
             textAlign: { xs: "left", sm: "left" },
@@ -40,7 +41,7 @@ const Apropos = () => {
             direction="row"
             spacing={2}
             sx={{
-              mt: -30,
+              mt: {xs:-20,sm:-30},
               width: "100%",
               maxWidth: "1200px",
               alignItems: "center",
@@ -95,7 +96,7 @@ const Apropos = () => {
               }}
             >
               <img
-                src="src/components/img/About.jpg"
+                src="src/components/img/hero/About.jpg"
                 alt="A propos de nous"
                 style={{
                   width: "100%",

@@ -23,6 +23,7 @@ function App() {
       <ThemeProvider
         // @ts-ignore
         theme={theme}
+        
       >
         <CssBaseline />
         <H1 />

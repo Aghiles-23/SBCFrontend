@@ -8,6 +8,7 @@ import { Route, Routes } from "react-router-dom";
 import Banques from "./Pages/Banques/Banques";
 //import Login from "./Pages/Authentification/Login";
 import SignUp from "./Pages/Authentification/SignUp";
+import Logout from "./Pages/Authentification/Logout";
 import Offres from "./Pages/Offres/OffresGeneral";
 import CreditCard from "./Pages/Offres/Particulier/CreditCard";
 import Credit from "./Pages/Offres/Particulier/CreditCard";
@@ -35,6 +36,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />}></Route>
           <Route path="/login" element={<Home />}></Route>
+          <Route path="/logout" element={<Logout />}></Route>
           <Route path="/signup" element={<SignUp />}></Route>
           <Route path="/banques" element={<Banques />}></Route>
           <Route path="/offres" element={<Offres />}></Route>

@@ -1,4 +1,8 @@
+// Login.jsx
+
 import { useState } from "react";
+import PropTypes from "prop-types";
+
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
@@ -14,9 +18,13 @@ import {
   Typography,
 } from "@mui/material";
 
-const initialUser = { identifier: "", password: "" };
+const initialUser = { identifier: "", password: "",avatar:"" };
 
-const Login = () => {
+const Login = ({ onLogin }) => {
+
+
+  
+  // Ajouter la prop onLogin
   const [user, setUser] = useState(initialUser);
   const navigate = useNavigate();
 
@@ -29,7 +37,6 @@ const Login = () => {
   };
 
   const handleLogin = async () => {
-   // const url = `http://localhost:1337/api/auth/local`;
     try {
       if (user.identifier && user.password) {
         const { data } = await axios.post(LoginUrl, user);
@@ -37,22 +44,26 @@ const Login = () => {
           storeUser(data);
           toast.success("Connexion avec succès!", {
             hideProgressBar: true,
+            autoClose:1500,
           });
           console.log(data);
           setUser(initialUser);
+          // Appeler la fonction de mise à jour de l'état d'authentification
+          onLogin(true);
           navigate("/");
         }
       }
     } catch (error) {
       toast.error(error.message, {
         hideProgressBar: true,
+        autoClose:1500,
+
       });
     }
   };
 
   return (
     <Stack
-      //className="border"
       sx={{
         display: "flex",
         direction: "column",
@@ -76,10 +87,7 @@ const Login = () => {
           Se Connecter{" "}
         </Typography>
       </Box>
-      <Box
-        // className="border"
-        sx={{ display: "flex", direction: "column", gap: 3 }}
-      >
+      <Box sx={{ display: "flex", direction: "column", gap: 3 }}>
         <form>
           <Box sx={{ mb: 10, height: "5px", width: "100%" }}>
             <TextField
@@ -90,7 +98,6 @@ const Login = () => {
               onChange={handleChange}
               placeholder="Enter your email"
               margin="normal"
-              // fullWidth
             />
           </Box>
 
@@ -145,5 +152,7 @@ const Login = () => {
     </Stack>
   );
 };
-
+Login.propTypes = {
+  onLogin: PropTypes.func.isRequired, // 'onLogin' doit être une fonction et obligatoire
+};
 export default Login;

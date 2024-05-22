@@ -1,8 +1,6 @@
-//import React from 'react';
-// @ts-ignore
 import { Box, Typography, ThemeProvider, CssBaseline } from "@mui/material";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Navigation } from "swiper/modules";
+import { Pagination, Navigation, Autoplay } from "swiper/modules"; // Importez le module Autoplay
 
 // Import Swiper styles
 import "swiper/css";
@@ -14,19 +12,28 @@ import { ColorModeContext, useMode } from "../../theme";
 
 const servicesData = [
   {
-    title: "Service 1",
-    description: "Description du Service 1.",
-    image: "src/components/img/Home7.jpg",
+    description:
+      "Explorez les meilleures offres de crédit automobile pour financer l'achat de votre voiture. Comparez les taux et les conditions pour trouver le prêt auto parfait.",
+    image: "src/components/img/hero/Car.png",
   },
   {
-    title: "Service 2",
-    description: "Description du Service 2.",
-    image: "src/components/img/Home8.jpg",
+    title: "",
+    description:
+      "Trouvez la carte de crédit qui vous convient le mieux. Comparez les avantages, les taux d'intérêt et les programmes de récompenses pour maximiser vos avantages financiers.",
+    image: "src/components/img/hero/CarteCredit.jpg",
   },
   {
-    title: "Service 3",
-    description: "Description du Service 3.",
-    image: "src/components/img/Home8.jpg",
+    title:
+      "Financez votre maison idéale avec des offres de crédit immobilier attractives.",
+    description:
+      "Découvrez les meilleures offres de crédit immobilier adaptées à vos besoins. Comparez les taux et conditions pour réaliser votre rêve d'achat immobilier.",
+    image: "src/components/img/hero/Immobilier.jpg",
+  },
+  {
+    title: "",
+    description:
+      "Obtenez un crédit à la consommation rapidement et facilement. Comparez les offres pour financer vos projets personnels, qu'il s'agisse d'un voyage, d'une rénovation ou d'un achat important",
+    image: "src/components/img/hero/ConsCredit.jpg",
   },
 ];
 
@@ -39,23 +46,40 @@ const Services = () => {
       value={colorMode}
     >
       <ThemeProvider
+        sx={{}}
         // @ts-ignore
         theme={theme}
       >
         <CssBaseline />
-        <Box sx={{ mt:-60,width: "100%", padding: "200px" }}>
+        <Box
+          sx={{
+            mt: { xs: 20, sm: 0 },
+            mb: 10,
+            width: "100%",
+            padding: { xs: 1, sm: "30px" },
+            ml: { xs: "0%", sm: "-0%" },
+          }}
+        >
           <Typography
             variant="h3"
-            sx={{ textAlign: "center", mb: 4, fontWeight: "bold" , fontFamily:"Acme"}}
+            sx={{
+              mr: "25%",
+              textAlign: "center",
+              mb: 4,
+
+              fontWeight: "bold",
+              fontFamily: "Acme",
+            }}
           >
             Services
           </Typography>
           <Swiper
-            modules={[Pagination, Navigation]}
+            modules={[Pagination, Navigation, Autoplay]} // Ajoutez le module Autoplay
             spaceBetween={40}
             slidesPerView={1}
             navigation
             pagination={{ clickable: true }}
+            autoplay={{ delay: 4000 }} // Changez de slide toutes les 3 secondes
           >
             {servicesData.map((service, index) => (
               <SwiperSlide key={index}>
@@ -64,7 +88,7 @@ const Services = () => {
                     position: "relative",
                     width: "100%",
                     height: { xs: "300px", md: "500px" },
-                    borderRadius:"15px"
+                    borderRadius: "15px",
                   }}
                 >
                   <img
@@ -82,9 +106,9 @@ const Services = () => {
                       position: "absolute",
                       top: 0,
                       left: 0,
-                      width: "100%",
+                      width: "30%",
                       height: "100%",
-                      backgroundColor: "rgba(0, 0, 0, 0.5)", // Overlay with transparency
+                      backgroundColor: "rgba(0, 0, 0, 0.1)", // Overlay with transparency
                       color: "white",
                       display: "flex",
                       flexDirection: "column",
@@ -95,12 +119,16 @@ const Services = () => {
                       padding: "20px",
                     }}
                   >
-                    <Typography variant="h4" sx={{ fontWeight: "bold", mb: 2 }}>
-                      {service.title}
-                    </Typography>
-                    <Typography variant="body1" sx={{ fontSize: "18px" }}>
+                    <Typography
+                      variant="h6"
+                      sx={{
+                        fontFamily: "Outfit",
+                        fontSize: { xs: "11px", sm: "24px" },
+                        color: "#FFFFFF",
+                      }}
+                    >
                       {service.description}
-                    </Typography>
+                    </Typography>{" "}
                   </Box>
                 </Box>
               </SwiperSlide>

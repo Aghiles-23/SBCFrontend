@@ -1,14 +1,14 @@
-import { useContext } from "react";
+// H1.jsx
+import { useContext, useEffect, useState } from "react";
 import { ColorModeContext } from "../../theme";
 import {
   Box,
   Button,
-  Container,
   Dialog,
   IconButton,
   Stack,
   Typography,
-  useMediaQuery,
+  Avatar,
   useTheme,
 } from "@mui/material";
 import {
@@ -17,14 +17,49 @@ import {
   LightModeOutlined,
 } from "@mui/icons-material";
 import SignUpIcon from "@mui/icons-material/Login";
+import LogoutIcon from "@mui/icons-material/Logout";
 import { Link } from "react-router-dom";
-import React from "react";
-import Login from "../../Pages/Authentification/Login";
+ import Login from "../../Pages/Authentification/Login";
+//import Logout from "../../Pages/Authentification/Logout";
 
 const H1 = () => {
   const colorMode = useContext(ColorModeContext);
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [avatarUrl, setAvatarUrl] = useState("");
+
+  const handleLogin = (isLoggedIn) => {
+    setIsAuthenticated(isLoggedIn);
+    if (isLoggedIn) {
+      const user = JSON.parse(localStorage.getItem("user"));
+      setAvatarUrl(
+        user?.avatar?.url
+          ? `http://localhost:1337${user.avatar.url}`
+          : "src/components/img/Avatar/doctor.png"
+      );
+    }
+  };
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const isLoggedIn = !!user;
+    setIsAuthenticated(isLoggedIn);
+    if (isLoggedIn) {
+      setAvatarUrl(
+        user?.avatar?.url
+          ? `http://localhost:1337${user.avatar.url}`
+          : "src/components/img/Avatar/doctor.png"
+      );
+    }
+  }, []);
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    localStorage.removeItem("user");
+    // Autres actions de déconnexion
+    window.location.reload(); // Recharge la page pour mettre à jour l'état d'authentification
+  };
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -33,24 +68,22 @@ const H1 = () => {
   const handleClose = () => {
     setOpen(false);
   };
-  //const [anchorEl, setAnchorEl] = useState(null);
-  // const [selectedIndex, setSelectedIndex] = useState(1);
 
   return (
     <Box
       sx={{
         bgcolor: "#068548",
-        py: "7px",
+        py: "5px",
         borderBottomRightRadius: 4,
         borderBottomLeftRadius: 4,
         width: "100%",
         position: "fixed",
         top: 0,
         mb: "50px",
-        zIndex: 999, // Assure que le stack reste au-dessus du contenu
+        zIndex: 999,
       }}
     >
-      <Container>
+      <Stack sx={{ width: "99.1%" }}>
         <Stack direction={"row"} alignItems={"center"}>
           <a href="/" style={{ textDecoration: "none", cursor: "pointer" }}>
             <Typography
@@ -60,7 +93,7 @@ const H1 = () => {
                 color: "#fff",
                 cursor: "pointer",
                 fontFamily: "Acme",
-                // Définissez le curseur ici si vous souhaitez qu'il soit pointer
+                ml: "10%",
               }}
               variant="body2"
             >
@@ -68,7 +101,6 @@ const H1 = () => {
             </Typography>
           </a>
           <Box flexGrow={3} />
-
           <div>
             {theme.palette.mode === "light" ? (
               <IconButton
@@ -99,25 +131,57 @@ const H1 = () => {
             )}
           </div>
 
-          <Button
-            variant="contained"
-            className="myButton"
-            component={Link}
-            to="/login"
-            onClick={handleClickOpen}
-            sx={{
-              backgroundColor: "#FFF9F9",
-              color: "#068548",
-              ml: 2,
-              "&:hover": {
-                backgroundColor: "#068548",
-                // @ts-ignore
-                color: "#ffffff",
-              },
-            }}
-            startIcon={<SignUpIcon />}
-          >
-            {useMediaQuery("(min-width:500px ) ") && (
+          {isAuthenticated ? (
+            <Stack direction="row" alignItems="center" spacing={2}>
+              <Avatar alt="User" src={avatarUrl} />
+              <Button
+                variant="contained"
+                className="ButtonPref"
+                component={Link}
+                to="/login"
+                onClick={handleLogout}
+                sx={{
+                  backgroundColor: "#FFF9F9",
+                  color: "#068548",
+                  mr: -10,
+                  px: -50,
+                  "&:hover": {
+                    backgroundColor: "#068548",
+                    color: "#ffffff",
+                  },
+                }}
+                startIcon={<LogoutIcon />}
+              >
+                <Typography
+                  sx={{
+                    paddingX: -10,
+                    ml: -0.5,
+                    fontWeight: 700,
+                    fontSize: "10px",
+                    fontFamily: "Acme",
+                    textDecoration: "none",
+                  }}
+                >
+                  Déconnecter
+                </Typography>
+              </Button>
+            </Stack>
+          ) : (
+            <Button
+              variant="contained"
+              className="myButton"
+              onClick={handleClickOpen}
+              sx={{
+                backgroundColor: "#FFF9F9",
+                color: "#068548",
+                ml: 2,
+                "&:hover": {
+                  backgroundColor: "#068548",
+                  color: "#ffffff",
+                },
+              }}
+              startIcon={<SignUpIcon />}
+            >
               <Typography
                 sx={{
                   fontWeight: 600,
@@ -128,41 +192,42 @@ const H1 = () => {
               >
                 Se connecter
               </Typography>
-            )}
-          </Button>
-
-          <Dialog
-            sx={{
-              ".MuiPaper-root": {
-                minWidth: { xs: "50%", md: "27%" },
-                minHeight: { xs: "auto", md: "auto" },
-                maxWidth: { md: "800px" },
-              },
-            }}
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-          >
-            <IconButton
+            </Button>
+          )}
+          {!isAuthenticated && (
+            <Dialog
               sx={{
-                ":hover": {
-                  color: "red",
-                  rotate: "180deg",
-                  transition: "0.3s",
+                ".MuiPaper-root": {
+                  minWidth: { xs: "50%", md: "27%" },
+                  minHeight: { xs: "auto", md: "auto" },
+                  maxWidth: { md: "800px" },
                 },
-                position: "absolute",
-                top: 0,
-                right: 10,
               }}
-              onClick={handleClose}
+              open={open}
+              onClose={handleClose}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
             >
-              <Close />
-            </IconButton>
-            <Login />
-          </Dialog>
+              <IconButton
+                sx={{
+                  ":hover": {
+                    color: "red",
+                    rotate: "180deg",
+                    transition: "0.3s",
+                  },
+                  position: "absolute",
+                  top: 0,
+                  right: 10,
+                }}
+                onClick={handleClose}
+              >
+                <Close />
+              </IconButton>
+              <Login onLogin={handleLogin} />
+            </Dialog>
+          )}
         </Stack>
-      </Container>
+      </Stack>
     </Box>
   );
 };

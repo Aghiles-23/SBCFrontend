@@ -17,30 +17,30 @@ import "swiper/css/pagination";
 import "./slider.css";
 import { Link } from "react-router-dom";
 import { ColorModeContext, useMode } from "../../theme";
+ import BankLogoSec from "./BankLogoSec";
 
 const Hero = () => {
   const [theme, colorMode] = useMode();
 
-  //const isScreenSmall = useMediaQuery("(max-width: 600px)");
   return (
     <ColorModeContext.Provider
       // @ts-ignore
       value={colorMode}
     >
       <ThemeProvider
-        sx={{ backgroundColor: "#8888" }}
+        sx={{ backgroundColor: "#888888" }}
         // @ts-ignore
         theme={theme}
       >
         <CssBaseline />
         <Stack
-          //className="border"
+          id="home"
           sx={{
             position: "relative",
             width: "100%",
             height: "700px",
-            // marginBottom: 10,
-            overflowX: "hidden" /* Masque le contenu qui dépasse */,
+            overflowX: "hidden",
+            mb: { xs: 10, sm: 0 },
           }}
         >
           {useMediaQuery("(min-width:1100px)") && (
@@ -49,26 +49,22 @@ const Hero = () => {
                 position: "relative",
                 width: "100%",
                 height: "700px",
-                overflow: "hidden" /* Masque le contenu qui dépasse */,
-
-                //marginBottom: 10,
+                overflow: "hidden",
               }}
             >
               <H3 />
               <img
-                src="src/components/img/Home5.jpg"
+                src="src/components/img/hero/Home.jpg"
                 alt=""
                 style={{
                   width: "100%",
                   height: "810px",
                   objectFit: "cover",
                   position: "absolute",
-                  overflowY: "hidden" /* Masque le contenu qui dépasse */,
-
+                  overflowY: "hidden",
                   top: 0,
                   left: 0,
                   zIndex: -1,
-                  // opacity: 800.5, // Ensure the image is behind the H3 component
                 }}
               />
               <Box
@@ -87,7 +83,7 @@ const Hero = () => {
                   }}
                   variant="h3"
                 >
-                  Simplifier Vos Choix Bancaires
+                  Simplifier Vos Choix De Crédits Bancaires
                 </Typography>
 
                 <Stack direction="row" alignItems="center" mt={3}>
@@ -102,9 +98,9 @@ const Hero = () => {
                       color: theme.palette.dark.main,
                     }}
                   >
-                    Avec SmartBankChoice, il est plus facile de trouver et de
-                    comparer les meilleurs tarifs et offres bancaires dans tout
-                    le pays. <br />
+                    Avec SmartBankChoice, trouvez et comparez facilement les
+                    meilleurs tarifs et offres de crédits bancaires qui vous conviennent à travers
+                    tout le pays. <br />
                   </Typography>
                 </Stack>
 
@@ -165,16 +161,12 @@ const Hero = () => {
           )}
           {useMediaQuery("(max-width:1100px ) ") && (
             <Stack
-              // className="border"
               sx={{
                 display: "flex",
                 width: "100%",
                 height: "50%",
-
-                // marginBottom: 10,
               }}
             >
-              {" "}
               <H3 />
               <Box
                 sx={{
@@ -182,23 +174,20 @@ const Hero = () => {
                   height: "500px",
                   paddingLeft: { xs: 0, sm: 4 },
                   textAlign: { xs: "center", sm: "left" },
-                  // mt: 10,
                 }}
               >
                 <img
-                  src="src/components/img/Home5.jpg"
+                  src="src/components/img/hero/Home.jpg"
                   alt=""
                   style={{
                     width: "100%",
                     height: "100%",
                     objectFit: "cover",
                     position: "absolute",
-                    overflowY: "hidden" /* Masque le contenu qui dépasse */,
-
+                    overflowY: "hidden",
                     top: 0,
                     left: 0,
                     zIndex: -1,
-                    // opacity: 800.5, // Ensure the image is behind the H3 component
                   }}
                 />
 
@@ -208,8 +197,6 @@ const Hero = () => {
                     ml: 3,
                     paddingLeft: { xs: 0 },
                     textAlign: { xs: "left", sm: "left" },
-                    //mb: 50,
-                    //paddingTop: 1,
                   }}
                 >
                   <Typography
@@ -226,7 +213,6 @@ const Hero = () => {
 
                   <Stack direction="row" alignItems="center" mt={3}>
                     <Typography
-                      //variant="h6"
                       sx={{
                         fontSize: { xs: "15px", sm: "19px" },
                         mt: 1,
@@ -304,8 +290,15 @@ const Hero = () => {
             </Stack>
           )}
         </Stack>
-        <About />
-        <Services/>
+        <Box id="about">
+          <About />
+        </Box>
+        <Box id="services">
+          <Services />
+        </Box>
+        <Box id="BankLogoSec">
+        <BankLogoSec/>
+        </Box>
       </ThemeProvider>
     </ColorModeContext.Provider>
   );

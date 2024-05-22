@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { ColorModeContext, useMode } from "../../theme";
 import Card from "@mui/material/Card";
- import CardContent from "@mui/material/CardContent";
+import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
@@ -82,7 +82,8 @@ function App() {
           theme={theme}
         >
           <CssBaseline />
-          <H1 />
+         <Box >
+         <H1 />
           <H3 />
           <Search
             onSearch={(search) => {
@@ -98,7 +99,7 @@ function App() {
               sx={{ cursor: "pointer" }}
             >
               {data.data.map((item) => (
-                <Grid item key={item.id} xs={5.9} sm={6} md={3.9} >
+                <Grid item key={item.id} xs={5.9} sm={6} md={3.9}>
                   <Card
                     onClick={() => {
                       handleClickOpen();
@@ -115,7 +116,7 @@ function App() {
                       width: "90%",
                       cursor: "pointer",
                       maxWidth: "430px",
-                      minHeight: {xs:"290px",md:"369px"},
+                      minHeight: { xs: "290px", md: "369px" },
                       maxHeight: "430px",
                       mt: 6,
                       backgroundColor:
@@ -165,7 +166,7 @@ function App() {
                         alignContent: "flex-end",
                         bottom: 2,
                         right: 2,
-                        ml: {xs:"42%",md:"70%"},
+                        ml: { xs: "42%", md: "70%" },
                       }}
                     >
                       <Button
@@ -230,6 +231,7 @@ function App() {
               <BankDetails clickedBank={clickedBank} />
             </Dialog>
           </Container>
+         </Box>
           <Footer />
         </ThemeProvider>
       </ColorModeContext.Provider>
