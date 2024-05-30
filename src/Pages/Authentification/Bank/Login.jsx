@@ -6,8 +6,8 @@ import PropTypes from "prop-types";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
-import { storeUser } from "../../axios/helpers";
-import { LoginUrl } from "../../axios/Apitokens";
+import { storeUser } from "../../../axios/helpers";
+import { LoginBanqueUrl } from "../../../axios/Apitokens";
 
 import {
   Box,
@@ -18,12 +18,9 @@ import {
   Typography,
 } from "@mui/material";
 
-const initialUser = { identifier: "", password: "",avatar:"" };
+const initialUser = { identifier: "", password: "" };
 
 const Login = ({ onLogin }) => {
-
-
-  
   // Ajouter la prop onLogin
   const [user, setUser] = useState(initialUser);
   const navigate = useNavigate();
@@ -38,26 +35,34 @@ const Login = ({ onLogin }) => {
 
   const handleLogin = async () => {
     try {
+      console.log(user);
       if (user.identifier && user.password) {
-        const { data } = await axios.post(LoginUrl, user);
-        if (data.jwt) {
-          storeUser(data);
+        const { data } = await axios.get(LoginBanqueUrl);
+        console.log(data);
+        const result = data.data.filter(
+          (item) =>
+            item.attributes.username === user.identifier &&
+            item.attributes.Password === user.password
+        );
+        console.log(result);
+        if (result.length === 1) {
+          // console.log(data.jwt);
+          //storeUser(data);
           toast.success("Connexion avec succès!", {
             hideProgressBar: true,
-            autoClose:1500,
+            autoClose: 1500,
           });
-          console.log(data);
-          setUser(initialUser);
+
+          // setUser(initialUser);
           // Appeler la fonction de mise à jour de l'état d'authentification
-          onLogin(true);
+          //onLogin(true);
           navigate("/");
         }
       }
     } catch (error) {
       toast.error(error.message, {
         hideProgressBar: true,
-        autoClose:1500,
-
+        autoClose: 1500,
       });
     }
   };
@@ -142,7 +147,7 @@ const Login = ({ onLogin }) => {
           >
             Vous n&apos;avez pas de compte ?
           </Typography>
-          <Box sx={{ ml: "35%", mt: -2.8 }}>
+          <Box sx={{ ml: "35%", mt: 0.8 }}>
             <h5>
               Cliquez <Link to="/signup">ici</Link>
             </h5>

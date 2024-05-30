@@ -128,6 +128,8 @@ const Hero = () => {
                         color: theme.palette.white.main,
                       },
                     }}
+                    component={Link}
+                    to="/banques/dashboard"
                   >
                     Comparer les offres
                   </Button>

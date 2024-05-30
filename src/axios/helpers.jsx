@@ -8,7 +8,8 @@ export const storeUser = (data) => {
     JSON.stringify({
       username: data.user.username,
       email: data.user.email,
-      avatar:data.user.avatar,
+     // avatar:data.user.avatar,
+      role:data.user.role,
       jwt: data.jwt,
     })
   );

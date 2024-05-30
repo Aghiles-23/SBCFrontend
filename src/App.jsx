@@ -7,11 +7,12 @@ import Home from "./Pages/Home";
 import { Route, Routes } from "react-router-dom";
 import Banques from "./Pages/Banques/Banques";
 //import Login from "./Pages/Authentification/Login";
-import SignUp from "./Pages/Authentification/SignUp";
+import SignUp from "./Pages/Authentification/Client/SignUp";
 import Logout from "./Pages/Authentification/Logout";
 import Offres from "./Pages/Offres/OffresGeneral";
 import CreditCard from "./Pages/Offres/Particulier/CreditCard";
 import Credit from "./Pages/Offres/Particulier/CreditCard";
+import Dashboard from "./Pages/Banques/Dashboard";
 
 import Automobile from "./Pages/Offres/Particulier/Automobile";
 /*import Moto from "./Offres/Moto";
@@ -39,6 +40,7 @@ function App() {
           <Route path="/logout" element={<Logout />}></Route>
           <Route path="/signup" element={<SignUp />}></Route>
           <Route path="/banques" element={<Banques />}></Route>
+          <Route path="/banques/dashboard" element={<Dashboard />}></Route>
           <Route path="/offres" element={<Offres />}></Route>
           <Route path="/offres/cartecredit" element={<CreditCard />}></Route>
           <Route path="/offres/cartecredit" element={<Credit />}></Route>
