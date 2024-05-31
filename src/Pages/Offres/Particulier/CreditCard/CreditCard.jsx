@@ -15,26 +15,59 @@ import {
   CssBaseline,
   Rating,
   Stack,
+  IconButton,
+  Dialog,
 } from "@mui/material";
 import { motion } from "framer-motion";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
-import { useGetbankByNameQuery } from "../../../Redux/bank";
-import { ColorModeContext, useMode } from "../../../theme";
+import { useGetbankByNameQuery } from "../../../../Redux/bank";
+import { ColorModeContext, useMode } from "../../../../theme";
 //import { Search } from "@mui/icons-material";
-import Search from "../../../components/header/Search";
+import Search from "../../../../components/header/Search";
 import { useState } from "react";
-import Offres from "./OffreHautParticulier";
-import H1 from "../../../components/header/H1";
-import Footer from "../../../components/footer/footer";
+import Offres from "../OffreHautParticulier";
+import H1 from "../../../../components/header/H1";
+import Footer from "../../../../components/footer/footer";
+import React from "react";
+import { Close } from "@mui/icons-material";
+import CreditCardDetails from "./CreditCardDetails";
+//import CreditCardDetails from " ./";
 
 //import { useState } from "react";
 
 function CreditCard() {
   const [theme, colorMode] = useMode();
   const [MyData, setMyData] = useState(`carte-credits?populate=*`);
+  const [clickedOffer, setclickedOffer] = useState({});
 
   const { data, error, isLoading } = useGetbankByNameQuery(MyData);
-  //const [clickedoffre, setclickedoffre] = useState({});
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const calculateRating = (reviews) => {
+    if (!Array.isArray(reviews)) {
+      console.error("reviews is not an array", reviews);
+      return 0; // ou une autre valeur par défaut
+    }
+
+    if (reviews.length === 0) {
+      return 0; // ou une autre valeur par défaut
+    }
+
+    let somme = 0;
+    reviews.forEach((item) => {
+      somme += item?.attributes?.note || 0;
+    });
+
+    return somme / reviews.length;
+  };
 
   if (isLoading) {
     return (
@@ -96,6 +129,11 @@ function CreditCard() {
               {data.data.map((item) => (
                 <Grid item key={item.id} xs={5.9} sm={6} md={4}>
                   <Card
+                    onClick={() => {
+                      handleClickOpen();
+                      setclickedOffer(item);
+                      console.log(item)
+                    }}
                     elevation={5}
                     key={item}
                     component={motion.section}
@@ -116,7 +154,13 @@ function CreditCard() {
                       maxHeight: { xs: "92%", md: "600px" },
                       mt: 6,
                       // @ts-ignore
-                      backgroundColor: theme.palette.mode === "light" ? theme.palette.myColor.main : theme.palette.bg.main,
+                      backgroundColor:
+                        // @ts-ignore
+                        theme.palette.mode === "light"
+                          ? // @ts-ignore
+                            theme.palette.myColor.main
+                          : // @ts-ignore
+                            theme.palette.bg.main,
 
                       ":hover ": {
                         //rotate: "1deg",
@@ -185,7 +229,7 @@ function CreditCard() {
                         }}
                         // @ts-ignore
                         image={`${import.meta.env.VITE_BASE_URL}${
-                          item.attributes.Image.data.attributes.url
+                          item?.attributes?.Image?.data?.attributes?.url || ""
                         }`}
                         // image="/static/images/cards/contemplative-reptile.jpg"
                         title={`${item.attributes.Source}`} //{item.attributes.Title}
@@ -358,11 +402,14 @@ function CreditCard() {
                         flexGrow={1}
                       >
                         <Rating
+                          size={"small"}
                           precision={0.1}
                           name="read-only"
-                          value={3}
+                          value={calculateRating(
+                            item?.attributes?.reviews?.data || ""
+                          )}
                           readOnly
-                          //sx={{mb:{xs:3}}}
+                          sx={{ ml: -1 }}
                         />
                         <Button
                           sx={{
@@ -395,6 +442,39 @@ function CreditCard() {
                 </Grid>
               ))}
             </Grid>
+            <Dialog
+              sx={{
+                ".MuiPaper-root": {
+                  minWidth: { xs: "100%", md: "500px" },
+                  minHeight: { xs: "40%", md: "50%" },
+                  maxWidth: { md: "800px" },
+                },
+              }}
+              open={open}
+              onClose={handleClose}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+            >
+              <IconButton
+                sx={{
+                  ":hover": {
+                    color: "red",
+                    rotate: "180deg",
+                    transition: "0.3s",
+                  },
+                  position: "absolute",
+                  top: 0,
+                  right: 10,
+                }}
+                onClick={handleClose}
+              >
+                <Close />
+              </IconButton>
+              < CreditCardDetails
+                clickedOffer={clickedOffer}
+              />
+              
+            </Dialog>
           </Container>
           <Footer />
         </ThemeProvider>

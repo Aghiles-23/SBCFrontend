@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 // Login.jsx
 
 import { useState } from "react";
@@ -6,8 +7,8 @@ import PropTypes from "prop-types";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
-import { storeUser } from "../../../axios/helpers";
-import { LoginBanqueUrl } from "../../../axios/Apitokens";
+import { storeBank, BankData } from "../../axios/helpers";
+import { LoginBanqueUrl } from "../../axios/Apitokens";
 
 import {
   Box,
@@ -18,45 +19,52 @@ import {
   Typography,
 } from "@mui/material";
 
-const initialUser = { identifier: "", password: "" };
+const initialBank = { identifier: "", password: "" };
 
 const Login = ({ onLogin }) => {
   // Ajouter la prop onLogin
-  const [user, setUser] = useState(initialUser);
+  const [bank, setBank] = useState(initialBank);
   const navigate = useNavigate();
 
   const handleChange = ({ target }) => {
     const { name, value } = target;
-    setUser((currentUser) => ({
-      ...currentUser,
+    setBank((currentBank) => ({
+      ...currentBank,
       [name]: value,
     }));
   };
 
   const handleLogin = async () => {
     try {
-      console.log(user);
-      if (user.identifier && user.password) {
+      console.log(bank);
+      if (bank.identifier && bank.password) {
         const { data } = await axios.get(LoginBanqueUrl);
-        console.log(data);
+        //console.log(data);
         const result = data.data.filter(
           (item) =>
-            item.attributes.username === user.identifier &&
-            item.attributes.Password === user.password
+            item.attributes.email === bank.identifier &&
+            item.attributes.Password === bank.password
         );
         console.log(result);
         if (result.length === 1) {
           // console.log(data.jwt);
-          //storeUser(data);
+          storeBank(result);
+          console.log(BankData());
           toast.success("Connexion avec succès!", {
             hideProgressBar: true,
             autoClose: 1500,
           });
+          onLogin(true);
 
           // setUser(initialUser);
           // Appeler la fonction de mise à jour de l'état d'authentification
           //onLogin(true);
           navigate("/");
+        } else {
+          toast.error("Connexion echouee verifiez vos coordonnees", {
+            hideProgressBar: true,
+            autoClose: 1500,
+          });
         }
       }
     } catch (error) {
@@ -99,7 +107,7 @@ const Login = ({ onLogin }) => {
               label="Email"
               type="email"
               name="identifier"
-              value={user.identifier}
+              value={bank.identifier}
               onChange={handleChange}
               placeholder="Enter your email"
               margin="normal"
@@ -111,7 +119,7 @@ const Login = ({ onLogin }) => {
               label="Password"
               type="password"
               name="password"
-              value={user.password}
+              value={bank.password}
               onChange={handleChange}
               placeholder="Enter password"
             />

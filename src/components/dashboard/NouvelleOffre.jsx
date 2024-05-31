@@ -1,262 +1,237 @@
 import React, { useState, useEffect } from "react";
 import { FaTimes, FaCheck } from "react-icons/fa";
 import ButtonCarre from "./ButtonCarre";
+import axios from "axios";
 
 function NouvelleOffre({ onClose, onConfirm }) {
-	const [selected, setSelected] = useState("");
-	const [metiers, setMetiers] = useState([]);
+  const [selected, setSelected] = useState("");
+  const [metiers, setMetiers] = useState([]);
 
-	const [formData, setFormData] = useState({
-		titre: "",
-		metier: "",
-		image: "",
-		description: "",
-		lieu: "",
-		debut: "",
-		fin: "",
-		remuneration: "",
-	});
+  const [data, setData] = useState({
+    Titre: null,
+    Source: "BNA",
+    PlafondPaiment: null,
+    PlafondRetrait: null,
+    Tarification: null,
+    bank: "2",
+  });
 
-	// async function getMetiers() {
-	// 	try {
-	// 		const response = await axiosInstance.get("/offres/metiers");
+  // async function getMetiers() {
+  // 	try {
+  // 		const response = await axiosInstance.get("/offres/metiers");
 
-	// 		console.log(response);
+  // 		console.log(response);
 
-	// 		if (response.request.status === 200) {
-	// 			setMetiers(response.data);
-	// 		}
-	// 	} catch (e) {
-	// 		console.log(e);
-	// 	}
-	// }
+  // 		if (response.request.status === 200) {
+  // 			setMetiers(response.data);
+  // 		}
+  // 	} catch (e) {
+  // 		console.log(e);
+  // 	}
+  // }
 
-	// useEffect(() => {
-	// 	getMetiers();
-	// }, []);
+  // useEffect(() => {
+  // 	getMetiers();
+  // }, []);
 
-	function handleInputChange(event, field) {
-		const value = event.target.value;
-		setFormData((prevFormData) => ({
-			...prevFormData,
-			[field]: value,
-		}));
-	}
+  function handleInputChange(event, field) {
+    const value = event.target.value;
+    setData((prevFormData) => ({
+      ...prevFormData,
+      [field]: value,
+    }));
+  }
 
-	// async function addOffre() {
-	// 	const accessToken = localStorage.getItem("accessToken");
-	// 	const response = await axiosInstance.post(
-	// 		`/offres/employeur/add`,
-	// 		formData,
-	// 		{
-	// 			headers: {
-	// 				Authorization: `Bearer ${accessToken}`,
-	// 			},
-	// 		}
-	// 	);
+  // async function addOffre() {
+  // 	const accessToken = localStorage.getItem("accessToken");
+  // 	const response = await axiosInstance.post(
+  // 		`/offres/employeur/add`,
+  // 		formData,
+  // 		{
+  // 			headers: {
+  // 				Authorization: `Bearer ${accessToken}`,
+  // 			},
+  // 		}
+  // 	);
 
-	// 	if (response.status === 201) {
-	// 		console.log(response.data.data);
-	// 	}
-	// }
+  // 	if (response.status === 201) {
+  // 		console.log(response.data.data);
+  // 	}
+  // }
 
-	// function handleClick() {
-	// 	addOffre();
-	// 	console.log(formData);
-	// 	onConfirm();
-	// }
+  async function addOffre() {
+    const image = await uploadImage(selectedImage);
+    const newData = {
+      ...data,
+      Image: image,
+    };
 
-	const [selectedImage, setSelectedImage] = useState(null);
-	const [previewUrlImage, setPreviewUrlImage] = useState(null);
-	const [uploadedImage, setUploadedImage] = useState(false);
+    const response = await axios.post(
+      `http://localhost:1337/api/carte-credits`,
+      { data: newData },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
-	const handleImageChange = (event) => {
-		const file = event.target.files[0];
-		setSelectedImage(file);
-		console.log(file);
-		if (file) {
-			setUploadedImage(false);
-			const reader = new FileReader();
-			reader.onloadend = () => {
-				setPreviewUrlImage(reader.result);
-			};
-			reader.readAsDataURL(file);
-		} else {
-			setPreviewUrlImage(null);
-		}
-	};
+    if (response.status === 201) {
+      console.log(response);
+    }
+  }
 
-	// const handleImageUpload = async () => {
-	// 	if (selectedImage) {
-	// 		const data = new FormData();
-	// 		data.append("image", selectedImage);
+  async function handleClick() {
+    await addOffre();
+    console.log(data);
+    await onConfirm();
+    await onClose();
+  }
 
-	// 		try {
-	// 			const response = await axiosInstance.post(
-	// 				"/offres/upload/" + folderName,
-	// 				data,
-	// 				{
-	// 					headers: {
-	// 						"Content-Type": "multipart/form-data",
-	// 					},
-	// 				}
-	// 			);
-	// 			console.log(response);
-	// 			if (response.status === 200) {
-	// 				console.log("done");
-	// 				setFormData((prevFormData) => ({
-	// 					...prevFormData,
-	// 					["image"]: response.data,
-	// 				}));
-	// 				console.log(formData);
-	// 				setUploadedImage(true);
-	// 			}
-	// 		} catch (error) {
-	// 			console.error("Error uploading file:", error);
-	// 		}
-	// 	} else {
-	// 		console.log("Please select a file.");
-	// 	}
-	// };
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [previewUrlImage, setPreviewUrlImage] = useState(null);
+  const [uploadedImage, setUploadedImage] = useState(false);
 
-	return (
-		<div>
-			<div
-				className={`fixed top-0 left-0 w-full h-full bg-black opacity-50 z-40 block`}
-			/>
-			<div className='fixed z-50 overlay flex flex-col items-center p-4 w-3/4 h-fit bg-white left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-lg'>
-				<div className='flex justify-between w-full mb-6'>
-					<h1 className='text-xl text-bleuF font-bold mb-6'>Nouvelle Offre</h1>
-				</div>
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    setSelectedImage(file);
+    console.log(file);
+    if (file) {
+      setUploadedImage(false);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewUrlImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setPreviewUrlImage(null);
+    }
+  };
 
-				<div className='grid grid-cols-3 gap-8 mb-4 w-full'>
-					<div className='flex flex-col'>
-						<label className='text-bleuF text-xs font-bold'>Titre</label>
-						<input
-							className='bg-violet text-bleuF border-gray-400 rounded-md p-1 focus:outline-none focus:border-blue-500'
-							type='text'
-							onChange={(e) => handleInputChange(e, "titre")}
-						></input>
-					</div>
+  const uploadImage = async (imageFile) => {
+    try {
+      const formData = new FormData();
+      formData.append("files", imageFile);
+      console.log(imageFile);
+      const res = await axios.post(
+        "http://localhost:1337/api/upload",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      console.log(res);
+      if (res.data && res.data[0]) {
+        return res.data[0]; // Adjust based on your API's response
+      } else {
+        throw new Error("Image upload failed");
+      }
+    } catch (error) {
+      console.error("Image upload error:", error);
+      throw error;
+    }
+  };
 
-					<div className='flex flex-col'>
-						<label className='text-bleuF text-xs font-bold'>Métier cible</label>
-						<select
-							className='bg-violet text-bleuF border-gray-400 rounded-md p-1 focus:outline-none focus:border-blue-500'
-							onChange={(e) => {
-								handleInputChange(e, "metier");
-								setSelected(e.target.value);
-							}}
-						>
-							<option value=''>Sélectionnez un métier</option>
-							{metiers.map((item, index) => (
-								<option key={item._id} value={item._id}>
-									{item.nom}
-								</option>
-							))}
-						</select>
-					</div>
-					<div className='flex items-center space-x-4 justify-center'>
-						<label
-							htmlFor='imageInput'
-							className='rounded bg-violet text-bleuF text-sm h-fit font-bold px-2 py-1 cursor-pointer'
-						>
-							Importer
-						</label>
+  return (
+    <div>
+      <div
+        className={`fixed top-0 left-0 w-full h-full bg-black opacity-50 z-40 block`}
+      />
+      <div className="fixed z-50 overlay flex flex-col items-center p-4 w-3/4 h-fit bg-white left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-lg">
+        <div className="flex justify-between w-full mb-6">
+          <h1 className="text-xl text-vert font-bold mb-6">Nouvelle Offre</h1>
+        </div>
 
-						<input
-							id='imageInput'
-							className='hidden'
-							type='file'
-							onChange={handleImageChange}
-						/>
+        <div className="grid grid-cols-3 gap-8 mb-4 w-full">
+          <div className="flex flex-col">
+            <label className="text-vert text-xs font-bold">Titre</label>
+            <input
+              className="bg-violet border-gray-400 rounded-md p-1 focus:outline-none focus:border-blue-500"
+              type="text"
+              onChange={(e) => handleInputChange(e, "Titre")}
+              value={data.Titre || ""}
+            ></input>
+          </div>
+          <div className="flex flex-col">
+            <label className="text-vert text-xs font-bold">
+              Plafond Paiement
+            </label>
+            <input
+              className="bg-violet border-gray-400 rounded-md p-1 focus:outline-none focus:border-blue-500"
+              type="number"
+              onChange={(e) => handleInputChange(e, "PlafondPaiment")}
+              value={data.PlafondPaiment || ""}
+            ></input>
+          </div>
+          <div className="flex items-center space-x-4 justify-center">
+            <label
+              htmlFor="imageInput"
+              className="rounded bg-violet text-bleuF text-sm h-fit font-bold px-2 py-1 cursor-pointer"
+            >
+              Importer
+            </label>
 
-						<div>
-							<img src={previewUrlImage} className={`w-16 h-16 border-bleuF`} />
-						</div>
-						{!uploadedImage && previewUrlImage && (
-							<button
-								className='rounded bg-violet text-bleuF text-sm font-bold px-2 py-2'
-								onClick={() => {}}
-							>
-								<FaCheck color='465475' />
-							</button>
-						)}
-						{uploadedImage && <FaCheck color='30CA3F' />}
-					</div>
-				</div>
+            <input
+              id="imageInput"
+              className="hidden"
+              type="file"
+              onChange={handleImageChange}
+            />
 
-				<div className='grid grid-cols-3 gap-8 mx-4 mb-4 w-full'>
-					<div className='flex flex-col'>
-						<label className='text-bleuF text-xs font-bold'>Début</label>
-						<input
-							className='bg-violet  text-bleuF border-gray-400 rounded-md p-1 focus:outline-none focus:border-blue-500'
-							type='date'
-							onChange={(e) => handleInputChange(e, "debut")}
-						></input>
-					</div>
-					<div className='flex flex-col'>
-						<label className='text-bleuF text-xs font-bold'>Fin</label>
-						<input
-							className='bg-violet  text-bleuF border-gray-400 rounded-md p-1 focus:outline-none focus:border-blue-500'
-							type='date'
-							onChange={(e) => handleInputChange(e, "fin")}
-						></input>
-					</div>
-				</div>
-				<div className='grid grid-cols-3 gap-8 mb-4 w-full'>
-					<div className='flex flex-col'>
-						<label className='text-bleuF text-xs font-bold'>Rémunération</label>
-						<input
-							className='bg-violet text-bleuF  border-gray-400 rounded-md p-1 focus:outline-none focus:border-blue-500'
-							type='text'
-							onChange={(e) => handleInputChange(e, "remuneration")}
-						></input>
-					</div>
-					<div className='flex flex-col'>
-						<label className='text-bleuF text-xs font-bold'>Lieu</label>
-						<input
-							className='bg-violet text-bleuF  border-gray-400 rounded-md p-1 focus:outline-none focus:border-blue-500'
-							type='text'
-							onChange={(e) => handleInputChange(e, "lieu")}
-						></input>
-					</div>
-				</div>
+            <div>
+              <img src={previewUrlImage} className={`w-16 h-16 border-bleuF`} />
+            </div>
+          </div>
+        </div>
 
-				<div className='grid grid-cols-3 gap-8 mb-4 w-full'>
-					<div className='flex flex-col col-span-2'>
-						<label className='text-bleuF text-xs font-bold'>Description</label>
-						<textarea
-							className='bg-violet text-bleuF  border-gray-400 rounded-md p-1 focus:outline-none focus:border-blue-500'
-							rows={4}
-							onChange={(e) => handleInputChange(e, "description")}
-						></textarea>
-					</div>
-				</div>
+        <div className="grid grid-cols-3 gap-8 mx-4 mb-10 w-full">
+          <div className="flex flex-col">
+            <label className="text-vert text-xs font-bold">
+              Plafond Retrait
+            </label>
+            <input
+              className="bg-violet border-gray-400 rounded-md p-1 focus:outline-none focus:border-blue-500"
+              type="number"
+              onChange={(e) => handleInputChange(e, "PlafondRetrait")}
+              value={data.PlafondRetrait || ""}
+            ></input>
+          </div>
+          <div className="flex flex-col">
+            <label className="text-vert text-xs font-bold">Tarification</label>
+            <input
+              className="bg-violet border-gray-400 rounded-md p-1 focus:outline-none focus:border-blue-500"
+              type="number"
+              onChange={(e) => handleInputChange(e, "Tarification")}
+              value={data.Tarification || ""}
+            ></input>
+          </div>
+        </div>
 
-				<div className='w-full'>
-					<div className='flex justify-end space-x-2'>
-						<ButtonCarre
-							couleur={"bleuF"}
-							couleurTexte={"violet"}
-							contenu={"Annuler"}
-							width={"fit text-xs"}
-							height={"fit"}
-							onClick={onClose}
-						></ButtonCarre>
-						<ButtonCarre
-							couleur={"vert"}
-							couleurTexte={"violet"}
-							contenu={"Ajouter"}
-							width={"fit text-xs"}
-							height={"fit"}
-							onClick={() => {}}
-						></ButtonCarre>
-					</div>
-				</div>
-			</div>
-		</div>
-	);
+        <div className="w-full">
+          <div className="flex justify-end space-x-2">
+            <ButtonCarre
+              couleur={"bleuF"}
+              couleurTexte={"violet"}
+              contenu={"Annuler"}
+              width={"fit text-xs"}
+              height={"fit"}
+              onClick={onClose}
+            ></ButtonCarre>
+            <ButtonCarre
+              couleur={"vert"}
+              couleurTexte={"violet"}
+              contenu={"Ajouter"}
+              width={"fit text-xs"}
+              height={"fit"}
+              onClick={() => handleClick()}
+            ></ButtonCarre>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default NouvelleOffre;

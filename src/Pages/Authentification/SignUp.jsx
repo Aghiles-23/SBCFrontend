@@ -3,8 +3,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
-import { SignUpUrl } from "../../../axios/Apitokens";
-import { SignUpBanqueUrl } from "../../../axios/Apitokens";
+//import { SignUpUrl } from "../../axios/Apitokens";
+import { SignUpBanqueUrl, SignUpUrl } from "../../axios/Apitokens";
 import {
   Box,
   Button,
@@ -36,7 +36,7 @@ const initialBank = {
   Description: "",
   BankImg: "",
 };
-const initialImage=null;
+const initialImage = null;
 
 const Registration = () => {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -133,25 +133,28 @@ const Registration = () => {
       }
     }
   };
-
   const uploadImage = async (imageFile) => {
     try {
       const formData = new FormData();
-      formData.append('files', imageFile);
+      formData.append("files", imageFile);
       console.log(imageFile);
-      const res = await axios.post('http://localhost:1337/api/upload', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+      const res = await axios.post(
+        "http://localhost:1337/api/upload",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
       console.log(res);
       if (res.data && res.data[0]) {
         return res.data[0]; // Adjust based on your API's response
       } else {
-        throw new Error('Image upload failed');
+        throw new Error("Image upload failed");
       }
     } catch (error) {
-      console.error('Image upload error:', error);
+      console.error("Image upload error:", error);
       throw error;
     }
   };
@@ -174,7 +177,7 @@ const Registration = () => {
             WebSite: bank.WebSite,
             email: bank.email,
             Password: bank.Password,
-            BankImg: imageUrl
+            BankImg: imageUrl,
           },
         };
 
@@ -374,7 +377,9 @@ const Registration = () => {
                     type="file"
                     hidden
                     name="profilePicture"
-                    value={role === "client" ? user.profilePicture: bank.BankImg}
+                    value={
+                      role === "client" ? user.profilePicture : bank.BankImg
+                    }
                     onChange={handleFileChange1}
                   />
                 </Button>

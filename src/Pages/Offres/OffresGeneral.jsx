@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 //import Typography from "@mui/material/Typography";
 import {
   Box,
@@ -52,37 +53,6 @@ function App() {
         <H1 />
         <H3 />
 
-        <Box sx={{ width: "100%", mt: 6 }}>
-          <Tabs
-            // className="border"
-            value={value}
-            onChange={handleChange}
-            aria-label="secondary tabs example"
-            sx={{
-              mt: -6,
-              width: "100%",
-              pl: { xs: "12%", md: 58},
-              "& .MuiTab-root": {
-                fontFamily: "Acme",
-
-                // Appliquer des styles aux onglets individuels
-                fontWeight: 600, // Police en gras
-                fontSize: "13px", // Taille de la police
-                //textTransform: "none", // Pas de transformation de texte (tout en minuscules)
-              },
-              "& .Mui-selected": {},
-            }}
-          >
-            <Tab
-              value="/offres"
-              label="Particulier"
-              component={Link}
-              to="/offres"
-            />
-            <Tab value="two" label="Professionel" />
-            <Tab value="three" label="Entreprise" />
-          </Tabs>
-        </Box>
         <Box>
           <Typography
             gutterBottom

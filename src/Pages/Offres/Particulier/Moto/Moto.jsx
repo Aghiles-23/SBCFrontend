@@ -12,26 +12,42 @@ import {
   CssBaseline,
   Rating,
   Stack,
+  Dialog,
+  IconButton,
 } from "@mui/material";
 import { motion } from "framer-motion";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
-import { useGetbankByNameQuery } from "../../../Redux/bank";
-import { ColorModeContext, useMode } from "../../../theme";
+import { useGetbankByNameQuery } from "../../../../Redux/bank";
+import { ColorModeContext, useMode } from "../../../../theme";
 //import { Search } from "@mui/icons-material";
-import Search from "../../../components/header/Search";
+import Search from "../../../../components/header/Search";
 import { useState } from "react";
-import Offres from "./OffreHautParticulier";
-import H1 from "../../../components/header/H1";
-import Footer from "../../../components/footer/footer";
+import Offres from "../OffreHautParticulier";
+import H1 from "../../../../components/header/H1";
+import Footer from "../../../../components/footer/footer";
+import React from "react";
+import { Close } from "@mui/icons-material";
+import AutoDetails from "../Automobile/AutoDetails";
 
 //import { useState } from "react";
 
-function Automobile() {
+function Moto() {
   const [theme, colorMode] = useMode();
-  const [MyData, setMyData] = useState(`credit-automobiles?populate=*`);
+  const [MyData, setMyData] = useState(`credit-motos?populate=*`);
+
+  const [clickedOffer, setclickedOffer] = useState({});
 
   const { data, error, isLoading } = useGetbankByNameQuery(MyData);
   //const [clickedoffre, setclickedoffre] = useState({});
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   if (isLoading) {
     return (
@@ -78,7 +94,7 @@ function Automobile() {
           <Search
             onSearch={(search) => {
               setMyData(
-                `credit-automobiles?populate=*&filters[Titre][$contains]=${search}`
+                `credit-Motos?populate=*&filters[Titre][$contains]=${search}`
               );
             }}
           />
@@ -94,6 +110,10 @@ function Automobile() {
               {data.data.map((item) => (
                 <Grid item key={item.id} xs={12} sm={6} md={6}>
                   <Card
+                    onClick={() => {
+                      handleClickOpen();
+                      setclickedOffer(item);
+                    }}
                     elevation={5}
                     key={item}
                     component={motion.section}
@@ -140,7 +160,7 @@ function Automobile() {
                       }}
                     >
                       <Box
-                       // className={"border"}
+                        // className={"border"}
                         sx={{
                           display: "flex",
                           flexDirection: "column",
@@ -181,7 +201,7 @@ function Automobile() {
                         />
                       </Box>
                       <Box
-                       // className="border"
+                        // className="border"
                         sx={{
                           display: "flex",
                           flexDirection: "column",
@@ -206,7 +226,7 @@ function Automobile() {
                         <Box sx={{ mt: 0 }}>
                           <Box
                             sx={{
-                              classname: "border",
+                              // classname: "border",
                               display: "flex",
                               alignItems: "center",
                               mt: 2,
@@ -231,7 +251,7 @@ function Automobile() {
                                 color: theme.palette.elementCard.primary,
                               }}
                             >
-                              Tarification : &nbsp;
+                              Montant de financement : &nbsp;
                             </Typography>
                             <Typography
                               sx={{
@@ -251,7 +271,7 @@ function Automobile() {
                           </Box>
                           <Box
                             sx={{
-                              classname: "border",
+                              // classname: "border",
                               display: "flex",
                               alignItems: "center",
                               mt: 0.5,
@@ -295,7 +315,7 @@ function Automobile() {
                           </Box>
                           <Box
                             sx={{
-                              classname: "border",
+                              // classname: "border",
                               display: "flex",
                               alignItems: "center",
                               mt: 0.5,
@@ -381,14 +401,20 @@ function Automobile() {
                             </Typography>
                           </Box>
                         </Box>
-                        <Box className="border" sx={{ mt: 5, ml: "69%" }}>
+                        <Box // className="border"
+                          sx={{ mt: 5, ml: "69%" }}
+                        >
                           <Button
+                            onClick={() => {
+                              handleClickOpen();
+                              setclickedOffer(item);
+                            }}
                             className="Buttonpref"
                             variant="contained"
                             sx={{
                               fontFamily: "Acme",
-                             // height: "40px",
-                             // width: "200px",
+                              // height: "40px",
+                              // width: "200px",
                               backgroundColor: "#068548",
                               borderRadius: "7px",
                               color: "white",
@@ -422,6 +448,37 @@ function Automobile() {
                 </Grid>
               ))}
             </Grid>
+            <Dialog
+              sx={{
+                ".MuiPaper-root": {
+                  minWidth: { xs: "100%", md: "700px" },
+                  minHeight: { xs: "40%", md: "40%" },
+                  maxWidth: { md: "800px" },
+                },
+              }}
+              open={open}
+              onClose={handleClose}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+            >
+              <IconButton
+                sx={{
+                  ":hover": {
+                    color: "red",
+                    rotate: "180deg",
+                    transition: "0.3s",
+                  },
+                  position: "absolute",
+                  top: 0,
+                  right: 10,
+                }}
+                onClick={handleClose}
+              >
+                <Close />
+              </IconButton>
+
+              <AutoDetails clickedOffer={clickedOffer} />
+            </Dialog>
           </Container>
           <Footer />
         </ThemeProvider>
@@ -429,4 +486,4 @@ function Automobile() {
     );
   }
 }
-export default Automobile;
+export default Moto;

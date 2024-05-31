@@ -10,6 +10,11 @@ import {
   Typography,
   Avatar,
   useTheme,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  FormControl,
+  FormLabel,
 } from "@mui/material";
 import {
   Close,
@@ -19,8 +24,10 @@ import {
 import SignUpIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { Link } from "react-router-dom";
-import Login from "../../Pages/Authentification/Client/Login";
-//import Logout from "../../Pages/Authentification/Logout";
+import LoginClient from "../../Pages/Authentification/LoginUser";
+import LoginBank from "../../Pages/Authentification/LoginBank";
+import Logout from "../../Pages/Authentification/Logout";
+import Cookies from "js-cookie";
 
 const H1 = () => {
   const colorMode = useContext(ColorModeContext);
@@ -28,37 +35,39 @@ const H1 = () => {
   const [open, setOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState("");
+  const [userType, setUserType] = useState("");
 
   const handleLogin = (isLoggedIn) => {
     setIsAuthenticated(isLoggedIn);
     if (isLoggedIn) {
-      const user = JSON.parse(localStorage.getItem("user"));
+      const user = JSON.parse(Cookies.get("user"));
       setAvatarUrl(
-        user?.avatar?.url
-          ? `http://localhost:1337${user.avatar.url}`
+        user?.avatar
+          ? `http://localhost:1337${user.avatar}`
           : "src/components/img/Avatar/doctor.png"
       );
     }
   };
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    const isLoggedIn = !!user;
-    setIsAuthenticated(isLoggedIn);
-    if (isLoggedIn) {
+    const item = Cookies.get("user");
+    if (item) {
+      setIsAuthenticated(true);
+      const user = JSON.parse(Cookies.get("user"));
       setAvatarUrl(
-        user?.avatar?.url
-          ? `http://localhost:1337${user.avatar.url}`
+        user?.avatar
+          ? `http://localhost:1337${user.avatar}`
           : "src/components/img/Avatar/doctor.png"
       );
+    } else {
+      setIsAuthenticated(false);
     }
   }, []);
 
   const handleLogout = () => {
     setIsAuthenticated(false);
-    localStorage.removeItem("user");
-    // Autres actions de déconnexion
-    window.location.reload(); // Recharge la page pour mettre à jour l'état d'authentification
+    Logout();
+    window.location.reload();
   };
 
   const handleClickOpen = () => {
@@ -67,6 +76,11 @@ const H1 = () => {
 
   const handleClose = () => {
     setOpen(false);
+    setUserType("");
+  };
+
+  const handleUserTypeChange = (event) => {
+    setUserType(event.target.value);
   };
 
   return (
@@ -110,6 +124,7 @@ const H1 = () => {
                     theme.palette.mode === "dark" ? "light" : "dark"
                   );
                   colorMode.toggleColorMode();
+                  window.location.reload();
                 }}
                 color="inherit"
               >
@@ -123,6 +138,7 @@ const H1 = () => {
                     theme.palette.mode === "dark" ? "light" : "dark"
                   );
                   colorMode.toggleColorMode();
+                  window.location.reload();
                 }}
                 color="inherit"
               >
@@ -133,7 +149,11 @@ const H1 = () => {
 
           {isAuthenticated ? (
             <Stack direction="row" alignItems="center" spacing={2}>
-              <Avatar alt="User" src={avatarUrl} />
+              <Button  sx={{height:"100%"}} component={Link}
+                to="/banques/dashboard">
+                {" "}
+                <Avatar alt="User" src={avatarUrl} />
+              </Button>
               <Button
                 variant="contained"
                 className="ButtonPref"
@@ -223,7 +243,45 @@ const H1 = () => {
               >
                 <Close />
               </IconButton>
-              <Login onLogin={handleLogin} />
+              {!userType ? (
+                <Box sx={{ p: 3 }}>
+                  <Typography
+                    sx={{
+                      fontWeight: 600,
+                      fontSize: "24px",
+                      fontFamily: "Acme",
+                      textAlign: "center",
+                      mb: 2,
+                    }}
+                  >
+                    Choisir le type de connexion
+                  </Typography>
+                  <FormControl component="fieldset">
+                    <FormLabel component="legend">Vous êtes:</FormLabel>
+                    <RadioGroup
+                      aria-label="user-type"
+                      name="userType"
+                      value={userType}
+                      onChange={handleUserTypeChange}
+                    >
+                      <FormControlLabel
+                        value="client"
+                        control={<Radio />}
+                        label="Client"
+                      />
+                      <FormControlLabel
+                        value="banque"
+                        control={<Radio />}
+                        label="Banque"
+                      />
+                    </RadioGroup>
+                  </FormControl>
+                </Box>
+              ) : userType === "client" ? (
+                <LoginClient onLogin={handleLogin} />
+              ) : (
+                <LoginBank onLogin={handleLogin} />
+              )}
             </Dialog>
           )}
         </Stack>

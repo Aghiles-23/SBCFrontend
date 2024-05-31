@@ -6,8 +6,8 @@ import PropTypes from "prop-types";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
-import { storeUser } from "../../../axios/helpers";
-import { LoginUrl } from "../../../axios/Apitokens";
+import { storeUser } from "../../axios/helpers";
+import { Getimage, LoginUrl } from "../../axios/Apitokens";
 
 import {
   Box,
@@ -35,17 +35,21 @@ const Login = ({ onLogin }) => {
 
   const handleLogin = async () => {
     try {
-      console.log(user);
+      //console.log(user);
       if (user.identifier && user.password) {
         const { data } = await axios.post(LoginUrl, user);
+        console.log(data);
+        console.log(data.user.id);
+        const image = await axios.get(`${Getimage}/${data.user.id}?populate=*`);
         if (data.jwt) {
-          console.log(data.jwt);
-          storeUser(data);
+          console.log(5);
+          storeUser(data, image);
           toast.success("Connexion avec succès!", {
             hideProgressBar: true,
             autoClose: 1500,
           });
-          console.log(data);
+
+          // console.log(data);
           setUser(initialUser);
           // Appeler la fonction de mise à jour de l'état d'authentification
           onLogin(true);

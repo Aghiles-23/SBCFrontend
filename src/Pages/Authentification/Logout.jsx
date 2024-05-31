@@ -1,8 +1,11 @@
-const Logout = () => {
+import Cookies from "js-cookie";
+
+export const Logout = () => {
   // const navigate = useNavigate();
 
-  localStorage.removeItem("mode");
-  localStorage.removeItem("user");
+  Cookies.remove("mode");
+  Cookies.remove("user");
+  Cookies.remove("avatar");
   // navigate("/login");
 };
 

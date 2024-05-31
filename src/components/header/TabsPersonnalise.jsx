@@ -11,12 +11,12 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
-
 import MenuIcon from "@mui/icons-material/Menu";
 import { Close } from "@mui/icons-material";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import { ColorModeContext, useMode } from "../../theme";
+import Tabsoffer from "../../Pages/Offres/OfferTabs"
 
 const H3 = () => {
   const [theme, colorMode] = useMode();
@@ -31,7 +31,6 @@ const H3 = () => {
     }
   }, [location]);
 
-  // @ts-ignore
   // @ts-ignore
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -56,14 +55,12 @@ const H3 = () => {
   };
 
   return (
-    <ColorModeContext.Provider
-      // @ts-ignore
-      value={colorMode}
-    >
-      <ThemeProvider
-        // @ts-ignore
-        theme={theme}
-      >
+    <ColorModeContext.Provider 
+// @ts-ignore
+    value={colorMode}>
+      <ThemeProvider 
+// @ts-ignore
+      theme={theme}>
         <Stack
           sx={{
             display: "flex",
@@ -72,20 +69,17 @@ const H3 = () => {
             width: "100%",
             mt: 5.7,
             mb: 5,
-            // borderBottom: "2px solid green", // Ajout de la bordure en bas
           }}
         >
           {useMediaQuery("(min-width:900px)") && (
             <Box
               sx={{
                 width: "100%",
-                bgcolor:
-                  // @ts-ignore
-                  theme.palette.green.main,
+                // @ts-ignore
+                bgcolor: theme.palette.green.main,
               }}
             >
               <Tabs
-                //  className="border"
                 value={value}
                 onChange={handleChange}
                 aria-label="secondary tabs example"
@@ -95,54 +89,40 @@ const H3 = () => {
                   },
                 }}
                 sx={{
-                  // mt: 0,
-                  ml: { sm: 8, md: "36%" }, // Marge à gauche pour différents breakpoints
+                  ml: { sm: 8, md: "36%" },
                   "& .MuiTab-root": {
                     fontFamily: "Acme",
                     // @ts-ignore
                     bgcolor: theme.palette.green.main,
                     // @ts-ignore
                     color: theme.palette.white.main,
-                    // Appliquer des styles aux onglets individuels
-                    fontWeight: 600, // Police en gras
-                    fontSize: "14px", // Taille de la police
-                    //textTransform: "none", // Pas de transformation de texte (tout en minuscules)
+                    fontWeight: 600,
+                    fontSize: "14px",
+                    position: "relative",
                   },
                   "& .Mui-selected": {
                     // @ts-ignore
-                    bgcolor: theme.palette.bg.main,
-                    // @ts-ignore
-                    color: theme.palette.green.main,
-                   /* "&::after": {
-                      //  mt:"5",
-                      content: '" "',
+                    color: theme.palette.white.main,
+                    "&::after": {
+                      content: '""',
+                      display: "block",
                       position: "absolute",
-                      bottom: "-5px", // Adjust the position of the triangle
+                      bottom: "-5px", // Adjusted to position the triangle correctly
                       left: "50%",
                       transform: "translateX(-50%)",
                       width: 0,
                       height: 0,
                       borderLeft: "10px solid transparent",
                       borderRight: "10px solid transparent",
-                      borderBottom: "10px solid white", // Create the inverted triangle
-                    },*/
+                      // @ts-ignore
+                      borderBottom: `10px solid ${theme.palette.white.main}`,
+                    },
                   },
                 }}
               >
                 <Tab value="/" label="Home" component={Link} to="/" />
-                <Tab
-                  value="/banques"
-                  label="Banques"
-                  component={Link}
-                  to="/banques"
-                />
-                <Tab
-                  // className="border"
-                  value="/offres"
-                  label="Offres de crédit"
-                  component={Link}
-                  to="/offres"
-                />
+                <Tab value="/banques" label="Banques" component={Link} to="/banques" />
+                <Tab value="/offres" label="Offres de crédit" component={Link} to="/offres" />
               </Tabs>
             </Box>
           )}
@@ -196,7 +176,6 @@ const H3 = () => {
               </IconButton>
 
               <Stack
-                // className="border"
                 direction={"column"}
                 alignItems={"center"}
                 display={"flex"}
@@ -204,8 +183,7 @@ const H3 = () => {
               >
                 <Accordion
                   elevation={0}
-                  // @ts-ignore
-                  defaultExpanded="true"
+                  defaultExpanded={true}
                   sx={{ bgcolor: "inherit" }}
                 >
                   <AccordionSummary
@@ -239,7 +217,6 @@ const H3 = () => {
                     to="/offres"
                     sx={{
                       textDecoration: "none",
-                      color: "inherit",
                     }}
                   >
                     Offres de crédit
@@ -248,6 +225,7 @@ const H3 = () => {
               </Stack>
             </Box>
           </Drawer>
+          <Tabsoffer/>
         </Stack>
       </ThemeProvider>
     </ColorModeContext.Provider>

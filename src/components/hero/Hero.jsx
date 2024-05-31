@@ -129,7 +129,7 @@ const Hero = () => {
                       },
                     }}
                     component={Link}
-                    to="/banques/dashboard"
+                    to="/comparaison"
                   >
                     Comparer les offres
                   </Button>
