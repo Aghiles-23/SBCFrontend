@@ -22,18 +22,18 @@ import { ColorModeContext, useMode } from "../../../../theme";
 //import { Search } from "@mui/icons-material";
 import Search from "../../../../components/header/Search";
 import { useState } from "react";
-import Offres from "../OffreHautParticulier";
+import Offres from "../OffreEntreprise";
 import H1 from "../../../../components/header/H1";
 import Footer from "../../../../components/footer/footer";
 import React from "react";
 import { Close } from "@mui/icons-material";
-import MotoDetails from "./MotoDetails";
+import AutoDetails from "./PromotionImmobiliereDetails";
 
 //import { useState } from "react";
 
-function Automobile() {
+function Exploitation() {
   const [theme, colorMode] = useMode();
-  const [MyData, setMyData] = useState(`credit-motos?populate=*`);
+  const [MyData, setMyData] = useState(`credit-automobiles?populate=*`);
 
   const [clickedOffer, setclickedOffer] = useState({});
 
@@ -113,7 +113,7 @@ function Automobile() {
           <Search
             onSearch={(search) => {
               setMyData(
-                `credit-motos?populate=*&filters[Titre][$contains]=${search}`
+                `credit-automobiles?populate=*&filters[Titre][$contains]=${search}`
               );
             }}
           />
@@ -456,7 +456,7 @@ function Automobile() {
                 <Close />
               </IconButton>
 
-              <MotoDetails clickedOffer={clickedOffer} />
+              <AutoDetails clickedOffer={clickedOffer} />
             </Dialog>
           </Container>
           <Footer />
@@ -465,4 +465,4 @@ function Automobile() {
     );
   }
 }
-export default Automobile;
+export default Exploitation;

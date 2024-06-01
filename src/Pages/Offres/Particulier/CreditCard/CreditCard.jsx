@@ -132,7 +132,7 @@ function CreditCard() {
                     onClick={() => {
                       handleClickOpen();
                       setclickedOffer(item);
-                      console.log(item)
+                      console.log(item);
                     }}
                     elevation={5}
                     key={item}
@@ -470,10 +470,7 @@ function CreditCard() {
               >
                 <Close />
               </IconButton>
-              < CreditCardDetails
-                clickedOffer={clickedOffer}
-              />
-              
+              <CreditCardDetails clickedOffer={clickedOffer} />
             </Dialog>
           </Container>
           <Footer />

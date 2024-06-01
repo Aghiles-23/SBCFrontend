@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { FaTimes } from "react-icons/fa";
-import ButtonCarre from "./ButtonCarre";
+import ButtonCarre from "../ButtonCarre";
 import axios from "axios";
+import { Cookie } from "@mui/icons-material";
+import Cookies from "js-cookie";
 
-function ModifierOffre({ id, onClose, onConfirm }) {
+function ModifierOffre({ id, categorie, onClose, onConfirm }) {
   const [formData, setFormData] = useState({
     Titre: null,
-    PlafondPaiment: null,
-    PlafondRetrait: null,
-    Tarification: null,
+    DureeCredit: null,
+    MontantFinancement: null,
+    TauxInteret: null,
   });
 
   // Fields present in the initial formData
@@ -24,9 +26,31 @@ function ModifierOffre({ id, onClose, onConfirm }) {
   }
 
   async function getOffre(id) {
-    const response = await axios.get(
-      `http://localhost:1337/api/carte-credits/` + id
-    );
+    console.log(id);
+    let url = "http://localhost:1337/api/";
+
+    switch (categorie) {
+      case "Crédit automobile":
+        url = url + "credit-automobiles/";
+        break;
+
+      case "Crédit moto":
+        url = url + "credit-motos/";
+        break;
+
+      case "Crédit à la consommation":
+        url = url + "credit-consommations/";
+        break;
+
+      case "Crédit immobilier":
+        url = url + "credit-immobiliers/";
+        break;
+
+      default:
+        break;
+    }
+
+    const response = await axios.get(url + id);
 
     if (response.status === 200) {
       const fetchedData = response.data.data.attributes;
@@ -43,6 +67,27 @@ function ModifierOffre({ id, onClose, onConfirm }) {
   }
 
   async function updateOffre(id) {
+    let url = "http://localhost:1337/api/";
+    switch (categorie) {
+      case "Crédit automobile":
+        url = url + "credit-automobiles/";
+        break;
+
+      case "Crédit moto":
+        url = url + "credit-motos/";
+        break;
+
+      case "Crédit à la consommation":
+        url = url + "credit-consommations/";
+        break;
+
+      case "Crédit immobilier":
+        url = url + "credit-immobiliers/";
+        break;
+
+      default:
+        break;
+    }
     // Filter formData to only include initial fields
     const filteredFormData = Object.keys(formData)
       .filter((key) => initialFields.includes(key))
@@ -52,10 +97,7 @@ function ModifierOffre({ id, onClose, onConfirm }) {
       }, {});
 
     console.log(filteredFormData);
-    const response = await axios.put(
-      `http://localhost:1337/api/carte-credits/` + id,
-      { data: filteredFormData }
-    );
+    const response = await axios.put(url + id, { data: filteredFormData });
 
     if (response.status === 200) {
       console.log(response);
@@ -96,14 +138,12 @@ function ModifierOffre({ id, onClose, onConfirm }) {
             ></input>
           </div>
           <div className="flex flex-col">
-            <label className="text-vert text-xs font-bold">
-              Plafond Paiement
-            </label>
+            <label className="text-vert text-xs font-bold">Duree Credit</label>
             <input
               className="bg-violet border-gray-400 rounded-md p-1 focus:outline-none focus:border-blue-500"
               type="number"
-              onChange={(e) => handleInputChange(e, "PlafondPaiment")}
-              value={formData.PlafondPaiment || ""}
+              onChange={(e) => handleInputChange(e, "DureeCredit")}
+              value={formData.DureeCredit || ""}
             ></input>
           </div>
         </div>
@@ -111,22 +151,22 @@ function ModifierOffre({ id, onClose, onConfirm }) {
         <div className="grid grid-cols-2 gap-8 mx-4 mb-10 w-full">
           <div className="flex flex-col">
             <label className="text-vert text-xs font-bold">
-              Plafond Retrait
+              Montant Financement
             </label>
             <input
               className="bg-violet border-gray-400 rounded-md p-1 focus:outline-none focus:border-blue-500"
               type="number"
-              onChange={(e) => handleInputChange(e, "PlafondRetrait")}
-              value={formData.PlafondRetrait || ""}
+              onChange={(e) => handleInputChange(e, "MontantFinancement")}
+              value={formData.MontantFinancement || ""}
             ></input>
           </div>
           <div className="flex flex-col">
-            <label className="text-vert text-xs font-bold">Tarification</label>
+            <label className="text-vert text-xs font-bold">Taux Interet</label>
             <input
               className="bg-violet border-gray-400 rounded-md p-1 focus:outline-none focus:border-blue-500"
               type="number"
-              onChange={(e) => handleInputChange(e, "Tarification")}
-              value={formData.Tarification || ""}
+              onChange={(e) => handleInputChange(e, "TauxInteret")}
+              value={formData.TauxInteret || ""}
             ></input>
           </div>
         </div>

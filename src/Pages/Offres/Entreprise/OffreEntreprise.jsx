@@ -50,7 +50,7 @@ function App() {
           <Grid container spacing={2} mt={0.5} justifyContent="center" sx={{ cursor: "pointer" }}>
             <Grid item xs={6} sm={4} md={2}>
               <Card
-                onClick={() => handleClickOpen1("/offresEntreprise/Financement")}
+                onClick={() => handleClickOpen1("/offresEntreprise/investissement")}
                 elevation={5}
                 sx={{
                   height: "90%",
@@ -67,7 +67,7 @@ function App() {
                     <CreditCardIcon fontSize="large" />
                   </Box>
                   <Typography gutterBottom variant="h5" fontSize={16} fontWeight={600}>
-                    Credit Financement
+                    Credit Investissement
                   </Typography>
                 </CardContent>
               </Card>
@@ -152,7 +152,7 @@ function App() {
           </Grid>
         </Box>
         
-        <Footer />
+        {/* <Footer /> */}
       </ThemeProvider>
     </ColorModeContext.Provider>
   );

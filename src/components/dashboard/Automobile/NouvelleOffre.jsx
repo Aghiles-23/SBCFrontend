@@ -1,19 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { FaTimes, FaCheck } from "react-icons/fa";
-import ButtonCarre from "./ButtonCarre";
+import ButtonCarre from "../ButtonCarre";
 import axios from "axios";
+import Cookies from "js-cookie";
 
-function NouvelleOffre({ onClose, onConfirm }) {
+function NouvelleOffre({ categorie, onClose, onConfirm }) {
   const [selected, setSelected] = useState("");
   const [metiers, setMetiers] = useState([]);
+
+  const [image, setImage] = useState(null);
+  const [bankId, setBankId] = useState(null);
 
   const [data, setData] = useState({
     Titre: null,
     Source: "BNA",
-    PlafondPaiment: null,
-    PlafondRetrait: null,
-    Tarification: null,
-    bank: "2",
+    DureeCredit: null,
+    MontantFinancement: null,
+    TauxInteret: null,
+    Type: "Particulier",
+    DescriptionEtConditions: "",
   });
 
   // async function getMetiers() {
@@ -30,9 +35,11 @@ function NouvelleOffre({ onClose, onConfirm }) {
   // 	}
   // }
 
-  // useEffect(() => {
-  // 	getMetiers();
-  // }, []);
+  useEffect(() => {
+    setBankId(JSON.parse(Cookies.get("user")).id);
+    setImage(JSON.parse(Cookies.get("user")).image);
+    console.log(JSON.parse(Cookies.get("user")));
+  }, []);
 
   function handleInputChange(event, field) {
     const value = event.target.value;
@@ -60,14 +67,39 @@ function NouvelleOffre({ onClose, onConfirm }) {
   // }
 
   async function addOffre() {
-    const image = await uploadImage(selectedImage);
     const newData = {
       ...data,
-      Image: image,
+      bank: bankId,
+      SourceImage: image,
     };
 
+    console.log(newData);
+
+    let url = "http://localhost:1337/api/";
+
+    switch (categorie) {
+      case "Crédit automobile":
+        url = url + "credit-automobiles";
+        break;
+
+      case "Crédit moto":
+        url = url + "credit-motos";
+        break;
+
+      case "Crédit à la consommation":
+        url = url + "credit-consommations";
+        break;
+
+      case "Crédit immobilier":
+        url = url + "credit-immobiliers";
+        break;
+
+      default:
+        break;
+    }
+
     const response = await axios.post(
-      `http://localhost:1337/api/carte-credits`,
+      url,
       { data: newData },
       {
         headers: {
@@ -83,30 +115,9 @@ function NouvelleOffre({ onClose, onConfirm }) {
 
   async function handleClick() {
     await addOffre();
-    console.log(data);
     await onConfirm();
     await onClose();
   }
-
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [previewUrlImage, setPreviewUrlImage] = useState(null);
-  const [uploadedImage, setUploadedImage] = useState(false);
-
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    setSelectedImage(file);
-    console.log(file);
-    if (file) {
-      setUploadedImage(false);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreviewUrlImage(reader.result);
-      };
-      reader.readAsDataURL(file);
-    } else {
-      setPreviewUrlImage(null);
-    }
-  };
 
   const uploadImage = async (imageFile) => {
     try {
@@ -139,12 +150,12 @@ function NouvelleOffre({ onClose, onConfirm }) {
       <div
         className={`fixed top-0 left-0 w-full h-full bg-black opacity-50 z-40 block`}
       />
-      <div className="fixed z-50 overlay flex flex-col items-center p-4 w-3/4 h-fit bg-white left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-lg">
+      <div className="fixed z-50 overlay flex flex-col items-center p-4 w-1/2 h-fit bg-white left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-lg">
         <div className="flex justify-between w-full mb-6">
           <h1 className="text-xl text-vert font-bold mb-6">Nouvelle Offre</h1>
         </div>
 
-        <div className="grid grid-cols-3 gap-8 mb-4 w-full">
+        <div className="grid grid-cols-2 gap-8 mb-4 w-full">
           <div className="flex flex-col">
             <label className="text-vert text-xs font-bold">Titre</label>
             <input
@@ -155,56 +166,35 @@ function NouvelleOffre({ onClose, onConfirm }) {
             ></input>
           </div>
           <div className="flex flex-col">
-            <label className="text-vert text-xs font-bold">
-              Plafond Paiement
-            </label>
+            <label className="text-vert text-xs font-bold">Duree Credit</label>
             <input
               className="bg-violet border-gray-400 rounded-md p-1 focus:outline-none focus:border-blue-500"
               type="number"
-              onChange={(e) => handleInputChange(e, "PlafondPaiment")}
-              value={data.PlafondPaiment || ""}
+              onChange={(e) => handleInputChange(e, "DureeCredit")}
+              value={data.DureeCredit || ""}
             ></input>
-          </div>
-          <div className="flex items-center space-x-4 justify-center">
-            <label
-              htmlFor="imageInput"
-              className="rounded bg-violet text-bleuF text-sm h-fit font-bold px-2 py-1 cursor-pointer"
-            >
-              Importer
-            </label>
-
-            <input
-              id="imageInput"
-              className="hidden"
-              type="file"
-              onChange={handleImageChange}
-            />
-
-            <div>
-              <img src={previewUrlImage} className={`w-16 h-16 border-bleuF`} />
-            </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-8 mx-4 mb-10 w-full">
+        <div className="grid grid-cols-2 gap-8 mx-4 mb-10 w-full">
           <div className="flex flex-col">
             <label className="text-vert text-xs font-bold">
-              Plafond Retrait
+              Montant Financement
             </label>
             <input
               className="bg-violet border-gray-400 rounded-md p-1 focus:outline-none focus:border-blue-500"
               type="number"
-              onChange={(e) => handleInputChange(e, "PlafondRetrait")}
-              value={data.PlafondRetrait || ""}
+              onChange={(e) => handleInputChange(e, "MontantFinancement")}
+              value={data.MontantFinancement || ""}
             ></input>
           </div>
           <div className="flex flex-col">
-            <label className="text-vert text-xs font-bold">Tarification</label>
+            <label className="text-vert text-xs font-bold">Taux Interet</label>
             <input
               className="bg-violet border-gray-400 rounded-md p-1 focus:outline-none focus:border-blue-500"
               type="number"
-              onChange={(e) => handleInputChange(e, "Tarification")}
-              value={data.Tarification || ""}
+              onChange={(e) => handleInputChange(e, "TauxInteret")}
+              value={data.TauxInteret || ""}
             ></input>
           </div>
         </div>
@@ -213,7 +203,7 @@ function NouvelleOffre({ onClose, onConfirm }) {
           <div className="flex justify-end space-x-2">
             <ButtonCarre
               couleur={"bleuF"}
-              couleurTexte={"violet"}
+              couleurTexte={"white"}
               contenu={"Annuler"}
               width={"fit text-xs"}
               height={"fit"}
@@ -221,7 +211,7 @@ function NouvelleOffre({ onClose, onConfirm }) {
             ></ButtonCarre>
             <ButtonCarre
               couleur={"vert"}
-              couleurTexte={"violet"}
+              couleurTexte={"white"}
               contenu={"Ajouter"}
               width={"fit text-xs"}
               height={"fit"}

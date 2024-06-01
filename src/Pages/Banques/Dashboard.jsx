@@ -1,11 +1,10 @@
-/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import ButtonCarre from "../../components/dashboard/ButtonCarre";
-import TableauOffres from "../../components/dashboard/TableauOffres";
-import TableauAuto from "../../components/dashboard/TableauAuto";
+import TableauOffres from "../../components/dashboard/CreditCard/TableauOffres";
+import TableauAuto from "../../components/dashboard/Automobile/TableauAuto";
 import TableauCategories from "../../components/dashboard/TableauCategories";
-import NouvelleOffre from "../../components/dashboard/NouvelleOffre";
-import ModifierOffre from "../../components/dashboard/ModifierOffre";
+import NouvelleOffre from "../../components/dashboard/CreditCard/NouvelleOffre";
+import ModifierOffre from "../../components/dashboard/CreditCard/ModifierOffre";
 import H1 from "../../components/header/H1";
 import { CircularProgress } from "@mui/material";
 import { FaPlus } from "react-icons/fa";
@@ -13,16 +12,21 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 function Dashboard() {
+  const [showModify, setShowModify] = useState(false);
+
   const id = JSON.parse(Cookies.get("user")).id;
-  console.log(id)
+  console.log(id);
   let [selected, setSelected] = useState(0);
   let [selectedCategorie, setSelectedCategorie] = useState("All");
   let [selectedSubCategorie, setSelectedSubCategorie] = useState("All");
   console.log(selected);
 
   // Offres variables
-  let [offresCreditImmobilier, setOffresCreditImmobilier] = useState([]);
+  let [offresCreditImmobilier, setOffresImmobilier] = useState([]);
+  let [offresCreditCard, setOffresCreditCard] = useState([]);
   let [offresAuto, setOffresAuto] = useState([]);
+  let [OffresConsommation, setOffresConsommation] = useState([]);
+  let [OffresMoto, setOffresMoto] = useState([]);
 
   let [categories, setCategories] = useState([]);
   let [loading, setLoading] = useState(false);
@@ -35,14 +39,20 @@ function Dashboard() {
       const response = await axios.get(
         `http://localhost:1337/api/banks/${id}?populate=*`
       );
+
       console.log(response);
 
       if (response.status === 200) {
-        console.log(response.data.data.attributes.carte_credits);
-        setOffresCreditImmobilier(
-          response.data.data.attributes.carte_credits.data
-        );
+        console.log(response.data.data.attributes);
+        setOffresCreditCard(response.data.data.attributes.carte_credits.data);
         setOffresAuto(response.data.data.attributes.credit_automobiles.data);
+        setOffresConsommation(
+          response.data.data.attributes.credit_consommations.data
+        );
+        setOffresImmobilier(
+          response.data.data.attributes.credit_immobiliers.data
+        );
+        setOffresMoto(response.data.data.attributes.credit_motos.data);
         setLoading(false);
       }
     } catch (e) {
@@ -127,9 +137,7 @@ function Dashboard() {
     getOffres();
   }, []);
 
-  const handleClick = (id) => {
-    window.location.href = `/employeur/offres/${id}`;
-  };
+  const handleClick = () => {};
 
   const handleCategorieClick = (id, categorie, subCategorie) => {
     setSelected(id);
@@ -187,6 +195,31 @@ function Dashboard() {
   const [showNouvelleOffre, setShowNouvelleOffre] = useState(false);
   const [showModifyOffre, setShowModifyOffre] = useState(false);
 
+  const subCategoryComponents = {
+    "Cartes de crédit": {
+      component: TableauOffres,
+      data: offresCreditCard,
+    },
+    "Crédit automobile": {
+      component: TableauAuto,
+      data: offresAuto,
+    },
+    "Crédit moto": {
+      component: TableauAuto,
+      data: OffresMoto,
+    },
+    "Crédit à la consommation": {
+      component: TableauAuto,
+      data: OffresConsommation,
+    },
+    "Crédit immobilier": {
+      component: TableauAuto,
+      data: offresCreditImmobilier,
+    },
+  };
+
+  const SelectedComponent = subCategoryComponents[selectedSubCategorie];
+
   return (
     <div className="min-h-screen pb-10">
       <H1 />
@@ -216,27 +249,18 @@ function Dashboard() {
             </p>
           </div>
           <div>
-            {selectedSubCategorie === "Cartes de crédit" && (
-              <TableauOffres
-                data={offresCreditImmobilier}
-                onRowClick={handleClick}
-                onDelete={getOffres}
-                onModify={() => getOffres()}
-                onAdd={() => getOffres()}
-                vide={vide}
-                categorie={selected}
-              ></TableauOffres>
-            )}
-            {selectedSubCategorie === "Crédit automobile" && (
-              <TableauAuto
-                data={offresAuto}
-                onRowClick={handleClick}
-                onDelete={getOffres}
-                onModify={() => {}}
-                onMove={() => {}}
-                vide={vide}
-                categorie={selected}
-              ></TableauAuto>
+            {SelectedComponent && (
+              <div>
+                <SelectedComponent.component
+                  data={SelectedComponent.data}
+                  onRowClick={handleClick}
+                  onDelete={getOffres}
+                  onModify={getOffres}
+                  onAdd={getOffres}
+                  vide={vide}
+                  categorie={selectedSubCategorie}
+                />
+              </div>
             )}
           </div>
         </div>

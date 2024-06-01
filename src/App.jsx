@@ -16,9 +16,9 @@ import Dashboard from "./Pages/Banques/Dashboard";
 
 import OffresEntreprise from "./Pages/Offres/Entreprise/OffreEntreprise";
 import OffresProfessionel from "./Pages/Offres/Professionel/OffreProfessionel";
-import FinancementEntreprise from "./Pages/Offres/Entreprise/Financement";
-import ExploitationEntreprise from "./Pages/Offres/Entreprise/Exploitation";
-import PrommotionImmobiliereEntreprise from "./Pages/Offres/Entreprise/PromotionImmobiliere";
+import FinancementEntreprise from "./Pages/Offres/Entreprise/Investissement/Investissement";
+import ExploitationEntreprise from "./Pages/Offres/Entreprise/Exploitation/Exploitation";
+import PrommotionImmobiliereEntreprise from "./Pages/Offres/Entreprise/PrommotionImmobiliere/PromotionImmobiliere";
 
 import Automobile from "./Pages/Offres/Particulier/Automobile/Automobile";
 import Moto from "./Pages/Offres/Particulier/Moto/Moto";
@@ -62,7 +62,7 @@ function App() {
             element={<OffresProfessionel />}
           ></Route>
           <Route
-            path="/offresEntreprise/Financement"
+            path="/offresEntreprise/investissement"
             element={<FinancementEntreprise />}
           ></Route>
           <Route

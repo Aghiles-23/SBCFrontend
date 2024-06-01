@@ -139,15 +139,18 @@ const Login = ({ onLogin }) => {
               fontSize: "13px",
               fontFamily: "Acme",
               textDecoration: "none",
-              ml: "20%",
+              ml: "16%",
             }}
           >
             Vous n&apos;avez pas de compte ?
           </Typography>
-          <Box sx={{ ml: "35%", mt: 0.8 }}>
-            <h5>
-              Cliquez <Link to="/signup">ici</Link>
-            </h5>
+          <Box sx={{ ml: "35%", mt: 0.8 , mb:3 }}>
+          <h4>
+          Cliquez{" "}
+          <Link className="text-xm text-vert  mb-6" to="/signup">
+            ici
+          </Link>
+        </h4>
           </Box>
         </form>
       </Box>

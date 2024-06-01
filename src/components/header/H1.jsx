@@ -1,6 +1,9 @@
 // H1.jsx
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { ColorModeContext } from "../../theme";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import {
   Box,
   Button,
@@ -15,6 +18,8 @@ import {
   FormControlLabel,
   FormControl,
   FormLabel,
+  Menu,
+  MenuItem,
 } from "@mui/material";
 import {
   Close,
@@ -33,6 +38,7 @@ const H1 = () => {
   const colorMode = useContext(ColorModeContext);
   const theme = useTheme();
   const [open, setOpen] = useState(false);
+  const [bank, setBank] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState("");
   const [userType, setUserType] = useState("");
@@ -59,6 +65,13 @@ const H1 = () => {
           ? `http://localhost:1337${user.avatar}`
           : "src/components/img/Avatar/doctor.png"
       );
+      if (user && user.username) {
+        // Si "username" existe, mettre la variable à false
+        setBank(false);
+      } else {
+        // Sinon, mettre la variable à true
+        setBank(true);
+      }
     } else {
       setIsAuthenticated(false);
     }
@@ -82,6 +95,32 @@ const H1 = () => {
   const handleUserTypeChange = (event) => {
     setUserType(event.target.value);
   };
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose2 = () => {
+    setAnchorEl(null);
+  };
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setAnchorEl(null);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
 
   return (
     <Box
@@ -148,17 +187,53 @@ const H1 = () => {
           </div>
 
           {isAuthenticated ? (
-            <Stack direction="row" alignItems="center" spacing={2}>
-              <Button  sx={{height:"100%"}} component={Link}
-                to="/banques/dashboard">
+            <Stack
+              direction="row"
+              alignItems="center"
+              spacing={2}
+              ref={menuRef}
+            >
+              <Button
+                sx={{ height: 40 }}
+                onClick={handleClick}
+
+                // component={Link}
+                // to="/banques/dashboard"
+                // disabled={!bank}
+              >
                 {" "}
                 <Avatar alt="User" src={avatarUrl} />
+                <Menu
+                  id="avatar-menu"
+                  anchorEl={anchorEl}
+                  open={Boolean(anchorEl)}
+                  onClose={handleMenuClose}
+                >
+                  <MenuItem
+                    onClick={handleClose}
+                    component={bank ? Link : "div"} // Utilisation conditionnelle du composant pour la navigation
+                    to="/banques/dashboard"
+                  >
+                    <AccountCircleIcon sx={{ mr: 1 }} />
+                    Mon Profil
+                  </MenuItem>
+                  <MenuItem
+                    onClick={handleClose}
+                    component={Link}
+                    to="/mes-coordonnees"
+                  >
+                    <LocationOnIcon sx={{ mr: 1 }} />
+                    Mes Coordonnées
+                  </MenuItem>
+                  <MenuItem onClick={handleLogout}>
+                    <ExitToAppIcon sx={{ mr: 1, color: "#DF0C0F" }} />
+                    Déconnexion
+                  </MenuItem>
+                </Menu>
               </Button>
-              <Button
+              {/* <Button
                 variant="contained"
                 className="ButtonPref"
-                component={Link}
-                to="/login"
                 onClick={handleLogout}
                 sx={{
                   backgroundColor: "#FFF9F9",
@@ -184,7 +259,7 @@ const H1 = () => {
                 >
                   Déconnecter
                 </Typography>
-              </Button>
+              </Button> */}
             </Stack>
           ) : (
             <Button

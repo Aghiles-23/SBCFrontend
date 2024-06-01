@@ -29,7 +29,7 @@ const initialUser = {
   profilePicture: null,
 };
 const initialBank = {
-  Title: "0",
+  Title: "",
   email: "",
   Password: "",
   WebSite: "",
@@ -82,57 +82,51 @@ const Registration = () => {
 
     setRole(value);
   };
-  const signUp = async () => {
-    try {
-      if (user.username && user.email && user.password) {
-        const formData = new FormData();
-        Object.keys(user).forEach((key) => {
-          formData.append(key, user[key]);
-        });
-        console.log(user);
-        console.log(formData);
+ const signUp = async () => {
+  try {
+    if (user.username && user.email && user.password) {
+      const formData = new FormData();
+      Object.keys(user).forEach((key) => {
+        formData.append(key, user[key]);
+      });
 
-        // Récupération de l'ID du rôle à partir de Strapi
-        // const rolesResponse = await axios.get('http://localhost:1337/roles');
-        // const roleData = rolesResponse.data;
-        // const role = roleData.find((r) => r.name === user.role);
-
-        // if (!role) {
-        //   throw new Error("Rôle non trouvé");
-        // }
-
-        // formData.append("role", role.id);
-
-        const res = await axios.post(SignUpUrl, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
-
-        if (res) {
-          toast.success("Enregistré avec succès !", {
-            hideProgressBar: true,
-          });
-          setUser(initialUser);
-          navigate("/login");
-        }
-      } else {
-        toast.error("Veuillez remplir tous les champs", {
-          hideProgressBar: true,
-        });
+      // Vérifie si une image a été sélectionnée
+      if (selectedImage) {
+        const imageUrl = await uploadImage(selectedImage);
+        formData.append('profilePicture', imageUrl);
       }
-    } catch (error) {
-      if (error.response && error.response.data) {
-        toast.error(error.response.data.error.message, {
+
+      const res = await axios.post(SignUpUrl, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      if (res) {
+        toast.success("Enregistré avec succès !", {
           hideProgressBar: true,
         });
-      } else {
-        toast.error(error.message, {
-          hideProgressBar: true,
-        });
+        setUser(initialUser);
+        navigate("/login");
       }
+    } else {
+      toast.error("Veuillez remplir tous les champs", {
+        hideProgressBar: true,
+      });
     }
-  };
+  } catch (error) {
+    if (error.response && error.response.data) {
+      toast.error(error.response.data.error.message, {
+        hideProgressBar: true,
+      });
+    } else {
+      toast.error(error.message, {
+        hideProgressBar: true,
+      });
+    }
+  }
+};
+
   const uploadImage = async (imageFile) => {
     try {
       const formData = new FormData();
@@ -159,9 +153,9 @@ const Registration = () => {
     }
   };
   const signUpbank = async () => {
-    console.log(5);
+    //console.log(5);
     try {
-      if (bank.email && bank.Password && bank.WebSite && bank.Description) {
+      if (bank.email && bank.Password && bank.WebSite && bank.Description && bank.Title) {
         const formData = new FormData();
         Object.keys(bank).forEach((key) => {
           formData.append(key, bank[key]);
@@ -245,6 +239,29 @@ const Registration = () => {
         <Grid container spacing={3}>
           {/* Colonne des champs existants */}
           <Grid item xs={1} md={1}>
+          <FormControl
+              fullWidth
+              margin="normal"
+              sx={{ height: "50px", width: "270px" }}
+            >
+              <InputLabel id="role-select-label" sx={{ width: 900 }}>
+                Sélectionnez votre rôle
+              </InputLabel>
+              <Select
+                labelId="role-select-label"
+                name="role"
+                value={role}
+                onChange={handleChangeRole}
+                label="Sélectionnez votre rôle"
+                inputProps={{
+                  sx: { fontSize: "0.875rem" },
+                }}
+                sx={{ height: "100%", mb: 1, width: "100%", paddingX: "13px" }}
+              >
+                <MenuItem value="banque">Banque</MenuItem>
+                <MenuItem value="client">Client</MenuItem>
+              </Select>
+            </FormControl>
             {role === "client" && (
               <TextField
                 label="Nom d'utilisateur"
@@ -286,29 +303,7 @@ const Registration = () => {
               }}
               sx={{ height: "15%", mb: 1, width: "500%" }}
             />
-            <FormControl
-              fullWidth
-              margin="normal"
-              sx={{ height: "50px", width: "220px" }}
-            >
-              <InputLabel id="role-select-label" sx={{ width: 900 }}>
-                Sélectionnez votre rôle
-              </InputLabel>
-              <Select
-                labelId="role-select-label"
-                name="role"
-                value={role}
-                onChange={handleChangeRole}
-                label="Sélectionnez votre rôle"
-                inputProps={{
-                  sx: { fontSize: "0.875rem" },
-                }}
-                sx={{ height: "100%", mb: 1, width: "100%", paddingX: "13px" }}
-              >
-                <MenuItem value="banque">Banque</MenuItem>
-                <MenuItem value="client">Client</MenuItem>
-              </Select>
-            </FormControl>
+            
           </Grid>
 
           {/* Colonne des champs conditionnels */}
@@ -402,7 +397,19 @@ const Registration = () => {
             {role === "banque" && (
               <>
                 <TextField
-                  label="Site Web"
+                  label="Nom de votre banque"
+                  type="text"
+                  name="Title"
+                  value={bank.Title}
+                  onChange={handleChange}
+                  placeholder="Entrez votre site web"
+                  margin="normal"
+                  InputProps={{
+                    sx: { fontSize: "0.875rem" },
+                  }}
+                  sx={{ height: "15%", mb: 1, width: "65%" }}
+                /> <TextField
+                  label="Votre siteWeb"
                   type="text"
                   name="WebSite"
                   value={bank.WebSite}
@@ -509,7 +516,10 @@ const Registration = () => {
       </Typography>
       <Box sx={{ ml: "35%", mt: 0.8 }}>
         <h4>
-          Cliquez <Link to="/login">ici</Link>
+          Cliquez{" "}
+          <Link className="text-xm text-vert  mb-6" to="/login">
+            ici
+          </Link>
         </h4>
       </Box>
     </Stack>

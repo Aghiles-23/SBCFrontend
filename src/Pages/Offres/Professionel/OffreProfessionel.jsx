@@ -65,7 +65,7 @@ function App() {
             <Grid item xs={6} sm={4} md={2}>
               <Card
                 onClick={() =>
-                  handleClickOpen1("/offresEntreprise/Financement")
+                  handleClickOpen1("/offresEntreprise/investissement")
                 }
                 elevation={5}
                 sx={{
@@ -109,7 +109,7 @@ function App() {
                     fontSize={16}
                     fontWeight={600}
                   >
-                    Credit Financement
+                    Credit Investissement
                   </Typography>
                 </CardContent>
               </Card>

@@ -11,13 +11,13 @@ import {
   Box,
   IconButton,
 } from "@mui/material";
-import {  Close } from "@mui/icons-material";
+import { Close } from "@mui/icons-material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
 
-const FeedbackDialog = ({ open, handleClose, idOffer }) => {
+const FeedbackDialog = ({ open, handleClose, idOffer, type }) => {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
   const navigate = useNavigate();
@@ -34,20 +34,49 @@ const FeedbackDialog = ({ open, handleClose, idOffer }) => {
     console.log(7);
     console.log(JSON.parse(Cookies.get("user")));
     console.log(JSON.parse(Cookies.get("user")).id);
+    console.log(type);
     try {
       if (rating) {
-        const data = {
-          data: {
-            comment: comment,
-            note: rating,
-            users_permissions_user: {
-              id: JSON.parse(Cookies.get("user")).id,
-            },
-            credit_automobile: {
-              id: idOffer,
-            },
-          },
-        };
+        let data = null
+        switch (type) {
+          case "creditcard":
+            {
+                data = {
+                data: {
+                  comment: comment,
+                  note: rating,
+                  users_permissions_user: {
+                    id: JSON.parse(Cookies.get("user")).id,
+                  },
+                  carte_credit: {
+                    id: idOffer,
+                  },
+                },
+              };
+            }
+            break;
+          case "auto":
+            // code à exécuter si l'expression correspond à valeur2
+            {
+                data = {
+                data: {
+                  comment: comment,
+                  note: rating,
+                  users_permissions_user: {
+                    id: JSON.parse(Cookies.get("user")).id,
+                  },
+                  credit_automobile: {
+                    id: idOffer,
+                  },
+                },
+              };
+            }
+            break;
+          // vous pouvez avoir autant de cases que nécessaire
+          default:
+          // code à exécuter si l'expression ne correspond à aucune des valeurs
+        }
+        
 
         console.log(data);
 
@@ -57,7 +86,7 @@ const FeedbackDialog = ({ open, handleClose, idOffer }) => {
           {
             headers: {
               "Content-Type": "application/json",
-             // Authorization: `Bearer ${JSON.parse(Cookies.get("user")).jwt}`,
+              // Authorization: `Bearer ${JSON.parse(Cookies.get("user")).jwt}`,
             },
           }
         );
@@ -67,7 +96,7 @@ const FeedbackDialog = ({ open, handleClose, idOffer }) => {
           toast.success("Enregistré avec succès !", {
             hideProgressBar: true,
           });
-          navigate("/offres/automobile");
+          //navigate("/offres/automobile");
         }
       } else {
         toast.error("Veuillez remplir tous les champs", {

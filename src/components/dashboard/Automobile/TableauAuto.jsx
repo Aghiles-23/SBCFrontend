@@ -1,13 +1,15 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import { FaTrash, FaPen, FaArrowsAlt, FaPlus } from "react-icons/fa";
-import Popup from "./Popup";
-import ModifierOffre from "../dashboard/ModifierOffre";
-import ButtonCarre from "./ButtonCarre";
-import NouvelleOffre from "./NouvelleOffre";
+import Popup from "../Popup";
 import axios from "axios";
+import ModifierOffre from "./ModifierOffre";
+import ButtonCarre from "../ButtonCarre";
+import NouvelleOffre from "./NouvelleOffre";
 // import { DeplacerOffre } from "./DeplacerOffre";
 
-function TableauOffres({
+function TableauAuto({
   data,
   onRowClick,
   onDelete,
@@ -17,8 +19,7 @@ function TableauOffres({
   categorie,
 }) {
   const [selectedId, setSelectedId] = useState(null);
-  const [selectedOffre, setSelectedOffre] = useState("");
-  const [selectedCategorie, setSelectedCategorie] = useState(0);
+  const [selectedCategorie, setSelectedCategorie] = useState(null);
 
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [showModify, setShowModify] = useState(false);
@@ -27,7 +28,7 @@ function TableauOffres({
   const handleDelete = async () => {
     try {
       const response = await axios.delete(
-        "http://localhost:1337/api/carte-credits/" + selectedId
+        "http://localhost:1337/api/credit-automobiles/" + selectedId
       );
       console.log(response);
 
@@ -45,7 +46,7 @@ function TableauOffres({
         <div className="flex space-x-4">
           <ButtonCarre
             couleur="vert"
-            couleurTexte={"violet"}
+            couleurTexte={"white"}
             contenu={<FaPlus />}
             width={"fit text-sm"}
             height={"fit"}
@@ -59,9 +60,11 @@ function TableauOffres({
             >
               <p className="text-white text-sm font-bold">Titre</p>
               <p className="text-white text-sm font-bold">Source</p>
-              <p className="text-white text-sm font-bold">Plafond Paiement</p>
-              <p className="text-white text-sm font-bold">Plafond Retrait</p>
-              <p className="text-white text-sm font-bold">Tarification</p>
+              <p className="text-white text-sm font-bold">Duree Credit</p>
+              <p className="text-white text-sm font-bold">
+                Montant Financement
+              </p>
+              <p className="text-white text-sm font-bold">Taux interet</p>
               <p className="text-white text-sm font-bold">Actions</p>
             </div>
             <p className="text-bleuF text-lg font-bold">
@@ -75,9 +78,11 @@ function TableauOffres({
             >
               <p className="text-white text-sm font-bold">Titre</p>
               <p className="text-white text-sm font-bold">Source</p>
-              <p className="text-white text-sm font-bold">Plafond Paiement</p>
-              <p className="text-white text-sm font-bold">Plafond Retrait</p>
-              <p className="text-white text-sm font-bold">Tarification</p>
+              <p className="text-white text-sm font-bold">Duree Credit</p>
+              <p className="text-white text-sm font-bold">
+                Montant Financement
+              </p>
+              <p className="text-white text-sm font-bold">Taux interet</p>
               <p className="text-white text-sm font-bold">Actions</p>
             </div>
             <div className="w-full space-y-1">
@@ -94,13 +99,13 @@ function TableauOffres({
                     {item.attributes ? item.attributes.Source : ""}
                   </p>
                   <p className="text-black text-sm font-semibold">
-                    {item.attributes ? item.attributes.PlafondPaiment : ""}
+                    {item.attributes ? item.attributes.DureeCredit : ""}
                   </p>
                   <p className="text-black text-sm font-semibold">
-                    {item.attributes ? item.attributes.PlafondRetrait : ""}
+                    {item.attributes ? item.attributes.MontantFinancement : ""}
                   </p>
                   <p className="text-black text-sm font-semibold">
-                    {item.attributes ? item.attributes.Tarification : ""}
+                    {item.attributes ? item.attributes.TauxInteret : ""}
                   </p>
 
                   <div className="flex justify-center items-center space-x-4">
@@ -146,12 +151,14 @@ function TableauOffres({
       {showModify && (
         <ModifierOffre
           id={selectedId}
+          categorie={categorie}
           onConfirm={() => onModify()}
           onClose={() => setShowModify(false)}
         />
       )}
       {showNouvelleOffre && (
         <NouvelleOffre
+          categorie={categorie}
           onClose={() => setShowNouvelleOffre(false)}
           onConfirm={() => onAdd()}
         />
@@ -171,4 +178,4 @@ function TableauOffres({
   );
 }
 
-export default TableauOffres;
+export default TableauAuto;

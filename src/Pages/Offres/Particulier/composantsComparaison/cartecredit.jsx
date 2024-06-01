@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 import { motion } from "framer-motion";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
+import { useState } from "react";
 
 const CreditCardComponent = ({ item, theme }) => {
   const [clickedOffer, setclickedOffer] = useState({});

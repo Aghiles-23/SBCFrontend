@@ -143,7 +143,6 @@ const AutoDetails = ({ clickedOffer }) => {
           open={openFeedback}
           handleClose={handleCloseFeedback}
           idOffer={clickedOffer.id}
-          type={"auto"}
         />
         <ReviewsList
           open={openReviews}

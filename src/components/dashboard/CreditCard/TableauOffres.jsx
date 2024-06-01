@@ -1,17 +1,20 @@
-/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
 import React, { useState, useEffect } from "react";
-import { FaTrash, FaPen, FaArrowsAlt } from "react-icons/fa";
-import Popup from "./Popup";
+import { FaTrash, FaPen, FaArrowsAlt, FaPlus } from "react-icons/fa";
+import Popup from "../Popup";
+import ModifierOffre from "./ModifierOffre";
+import ButtonCarre from "../ButtonCarre";
+import NouvelleOffre from "./NouvelleOffre";
 import axios from "axios";
 // import { DeplacerOffre } from "./DeplacerOffre";
 
-function TableauAuto({
+function TableauOffres({
   data,
   onRowClick,
   onDelete,
   onModify,
-  onMove,
+  onAdd,
   vide,
   categorie,
 }) {
@@ -20,12 +23,13 @@ function TableauAuto({
   const [selectedCategorie, setSelectedCategorie] = useState(0);
 
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
-  const [showDeplacer, setShowDeplacer] = useState(false);
+  const [showModify, setShowModify] = useState(false);
+  const [showNouvelleOffre, setShowNouvelleOffre] = useState(false);
 
   const handleDelete = async () => {
     try {
       const response = await axios.delete(
-        "http://localhost:1337/api/credit-automobiles/" + selectedId
+        "http://localhost:1337/api/carte-credits/" + selectedId
       );
       console.log(response);
 
@@ -40,6 +44,16 @@ function TableauAuto({
   return (
     <div>
       <div className="w-full mt-6 space-y-1">
+        <div className="flex space-x-4">
+          <ButtonCarre
+            couleur="vert"
+            couleurTexte={"violet"}
+            contenu={<FaPlus />}
+            width={"fit text-sm"}
+            height={"fit"}
+            onClick={() => setShowNouvelleOffre(true)}
+          ></ButtonCarre>
+        </div>
         {data.length === 0 ? (
           <>
             <div
@@ -47,11 +61,9 @@ function TableauAuto({
             >
               <p className="text-white text-sm font-bold">Titre</p>
               <p className="text-white text-sm font-bold">Source</p>
-              <p className="text-white text-sm font-bold">Duree Credit</p>
-              <p className="text-white text-sm font-bold">
-                Montant Financement
-              </p>
-              <p className="text-white text-sm font-bold">Taux interet</p>
+              <p className="text-white text-sm font-bold">Plafond Paiement</p>
+              <p className="text-white text-sm font-bold">Plafond Retrait</p>
+              <p className="text-white text-sm font-bold">Tarification</p>
               <p className="text-white text-sm font-bold">Actions</p>
             </div>
             <p className="text-bleuF text-lg font-bold">
@@ -65,11 +77,9 @@ function TableauAuto({
             >
               <p className="text-white text-sm font-bold">Titre</p>
               <p className="text-white text-sm font-bold">Source</p>
-              <p className="text-white text-sm font-bold">Duree Credit</p>
-              <p className="text-white text-sm font-bold">
-                Montant Financement
-              </p>
-              <p className="text-white text-sm font-bold">Taux interet</p>
+              <p className="text-white text-sm font-bold">Plafond Paiement</p>
+              <p className="text-white text-sm font-bold">Plafond Retrait</p>
+              <p className="text-white text-sm font-bold">Tarification</p>
               <p className="text-white text-sm font-bold">Actions</p>
             </div>
             <div className="w-full space-y-1">
@@ -77,7 +87,7 @@ function TableauAuto({
                 <div
                   key={itemIndex}
                   className={`grid grid-cols-6 text-center justify-center bg-violet items-center p-2 rounded-lg cursor-pointer`}
-                  onClick={() => onRowClick(item._id)}
+                  // onClick={() =>  }
                 >
                   <p className="text-black text-sm font-semibold">
                     {item.attributes ? item.attributes.Titre : ""}
@@ -86,13 +96,13 @@ function TableauAuto({
                     {item.attributes ? item.attributes.Source : ""}
                   </p>
                   <p className="text-black text-sm font-semibold">
-                    {item.attributes ? item.attributes.DureeCredit : ""}
+                    {item.attributes ? item.attributes.PlafondPaiment : ""}
                   </p>
                   <p className="text-black text-sm font-semibold">
-                    {item.attributes ? item.attributes.MontantFinancement : ""}
+                    {item.attributes ? item.attributes.PlafondRetrait : ""}
                   </p>
                   <p className="text-black text-sm font-semibold">
-                    {item.attributes ? item.attributes.TauxInteret : ""}
+                    {item.attributes ? item.attributes.Tarification : ""}
                   </p>
 
                   <div className="flex justify-center items-center space-x-4">
@@ -105,7 +115,7 @@ function TableauAuto({
                           setSelectedId(item.id);
                           console.log(item.id);
                           e.stopPropagation();
-                          onModify(item.id);
+                          setShowModify(true);
                         }}
                       />
                       <FaTrash
@@ -135,6 +145,19 @@ function TableauAuto({
           onDismiss={() => setShowDeleteConfirmation(false)}
         />
       )}
+      {showModify && (
+        <ModifierOffre
+          id={selectedId}
+          onConfirm={() => onModify()}
+          onClose={() => setShowModify(false)}
+        />
+      )}
+      {showNouvelleOffre && (
+        <NouvelleOffre
+          onClose={() => setShowNouvelleOffre(false)}
+          onConfirm={() => onAdd()}
+        />
+      )}
       {/* {showDeplacer && (
 				<DeplacerOffre
 					id={selectedCategorie}
@@ -150,4 +173,4 @@ function TableauAuto({
   );
 }
 
-export default TableauAuto;
+export default TableauOffres;
