@@ -1,13 +1,25 @@
 /* eslint-disable react/prop-types */
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import { Box, Button, Typography } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FeedbackDialog from "../../Feedback/feedback";
 import ReviewsList from "../../Feedback/reviewlist";
+import Cookies from "js-cookie";
 
 const AutoDetails = ({ clickedOffer }) => {
   const [openFeedback, setOpenFeedback] = useState(false);
   const [openReviews, setOpenReviews] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const item = Cookies.get("user");
+    if (item) {
+      setIsAuthenticated(true);
+      const user = JSON.parse(Cookies.get("user"));
+    } else {
+      setIsAuthenticated(false);
+    }
+  }, []);
 
   const handleClickOpenFeedback = () => {
     setOpenFeedback(true);
@@ -34,7 +46,7 @@ const AutoDetails = ({ clickedOffer }) => {
         flexDirection: { xs: "column", sm: "row" },
       }}
     >
-      <Box
+      <Box  
         sx={{
           display: "flex",
           alignContent: "center",
@@ -44,11 +56,11 @@ const AutoDetails = ({ clickedOffer }) => {
         }}
       >
         <img
-          width={"80%"}
-          height={"80%"}
+          width={"200px"}
+          height={"200px"}
           // @ts-ignore
           src={`${import.meta.env.VITE_BASE_URL}${
-            clickedOffer.attributes.SourceImage.data.attributes.url
+            clickedOffer?.attributes?.SourceImage?.data?.attributes?.url
           }`}
           alt={clickedOffer.attributes.Title}
         />
@@ -105,40 +117,72 @@ const AutoDetails = ({ clickedOffer }) => {
         </Typography>
 
         <Box
-          sx={{
-            display: "flex",
-            direction: "row",
-            width: "100%",
-            mt: 10,
-            mb: 1,
-            mr: 1,
+        sx={{
+          display: "flex",
+          direction: "row",
+          width: "100%",
+          mt: 3,
+          mb: 1,
+          ml: 2,
+          mr: 1,
+        }}
+      >
+        <Button
+          className="ButtonPref"
+          variant="contained"
+          sx={{ backgroundColor: "#068548", ml: 0 }}
+          onClick={() => {
+            window.open(clickedOffer.attributes.Simulation, "_blank");
           }}
         >
-          <Button
-            variant="contained"
-            sx={{ backgroundColor: "#068548", ml: 0 }}
-            onClick={() => {
-              window.open(clickedOffer.attributes.Simulation, "_blank");
+          {" "}
+          <Typography
+            sx={{
+              fontWeight: 500,
+              fontSize: "14px",
+              fontFamily: "Acme",
+              textDecoration: "none",
             }}
           >
-            Site Officiel
-          </Button>
+            Simulation dans le site{" "}
+          </Typography>
+        </Button>
+        {isAuthenticated && (
           <Button
+            className="ButtonPref"
             variant="contained"
-            sx={{ backgroundColor: "#068548", ml: 10 }}
+            sx={{ backgroundColor: "#068548", ml: 7 }}
             onClick={handleClickOpenFeedback}
           >
-            Noter
+            <Typography
+              sx={{
+                fontWeight: 500,
+                fontSize: "14px",
+                fontFamily: "Acme",
+                textDecoration: "none",
+              }}
+            >
+              Noter
+            </Typography>
           </Button>
-
-          <Button
-            variant="contained"
-            sx={{ backgroundColor: "#068548", ml: 10 }}
-            onClick={handleClickOpenReviews}
-          >
-            Voir comments
-          </Button>
-        </Box>
+        )}
+        <Button
+          className="ButtonPref"
+          variant="contained"
+          sx={{ backgroundColor: "#068548", ml: 7 }}
+          onClick={handleClickOpenReviews}
+        > <Typography
+        sx={{
+          fontWeight: 500,
+          fontSize: "14px",
+          fontFamily: "Acme",
+          textDecoration: "none",
+        }}
+      >
+        Voir retours 
+      </Typography>
+        </Button>
+      </Box>
         <FeedbackDialog
           open={openFeedback}
           handleClose={handleCloseFeedback}

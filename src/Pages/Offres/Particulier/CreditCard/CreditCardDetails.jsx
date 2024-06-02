@@ -21,31 +21,20 @@ import ReviewsList from "../../Feedback/reviewlist";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 
-const CreditCardComponent = ({ clickedOffer ,isUser }) => {
+const CreditCardComponent = ({ clickedOffer }) => {
   const [openFeedback, setOpenFeedback] = useState(false);
   const [openReviews, setOpenReviews] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
   useEffect(() => {
     const item = Cookies.get("user");
     if (item) {
       setIsAuthenticated(true);
       const user = JSON.parse(Cookies.get("user"));
-      setAvatarUrl(
-        user?.avatar
-          ? `http://localhost:1337${user.avatar}`
-          : "src/components/img/Avatar/doctor.png"
-      );
-      if (user && user.username) {
-        // Si "username" existe, mettre la variable à false
-        setBank(false);
-      } else {
-        // Sinon, mettre la variable à true
-        setBank(true);
-      }
     } else {
       setIsAuthenticated(false);
     }
   }, []);
-
 
   const handleClickOpenFeedback = () => {
     setOpenFeedback(true);
@@ -289,28 +278,59 @@ const CreditCardComponent = ({ clickedOffer ,isUser }) => {
         }}
       >
         <Button
+          className="ButtonPref"
           variant="contained"
           sx={{ backgroundColor: "#068548", ml: 0 }}
           onClick={() => {
             window.open(clickedOffer.attributes.Simulation, "_blank");
           }}
         >
-          Site Officiel
+          {" "}
+          <Typography
+            sx={{
+              fontWeight: 500,
+              fontSize: "14px",
+              fontFamily: "Acme",
+              textDecoration: "none",
+            }}
+          >
+            Simulation dans le site{" "}
+          </Typography>
         </Button>
+        {isAuthenticated && (
+          <Button
+            className="ButtonPref"
+            variant="contained"
+            sx={{ backgroundColor: "#068548", ml: 7 }}
+            onClick={handleClickOpenFeedback}
+          >
+            <Typography
+              sx={{
+                fontWeight: 500,
+                fontSize: "14px",
+                fontFamily: "Acme",
+                textDecoration: "none",
+              }}
+            >
+              Noter
+            </Typography>
+          </Button>
+        )}
         <Button
-          variant="contained"
-          sx={{ backgroundColor: "#068548", ml: 7 }}
-          onClick={handleClickOpenFeedback}
-        >
-          Noter
-        </Button>
-
-        <Button
+          className="ButtonPref"
           variant="contained"
           sx={{ backgroundColor: "#068548", ml: 7 }}
           onClick={handleClickOpenReviews}
-        >
-          Voir comments
+        > <Typography
+        sx={{
+          fontWeight: 500,
+          fontSize: "14px",
+          fontFamily: "Acme",
+          textDecoration: "none",
+        }}
+      >
+        Voir retours 
+      </Typography>
         </Button>
       </Box>
       <FeedbackDialog

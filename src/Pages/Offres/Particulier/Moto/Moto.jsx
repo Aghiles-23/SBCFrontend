@@ -430,7 +430,7 @@ function Automobile() {
             <Dialog
               sx={{
                 ".MuiPaper-root": {
-                  minWidth: { xs: "100%", md: "700px" },
+                  minWidth: { xs: "100%", md: "800px" },
                   minHeight: { xs: "40%", md: "40%" },
                   maxWidth: { md: "800px" },
                 },

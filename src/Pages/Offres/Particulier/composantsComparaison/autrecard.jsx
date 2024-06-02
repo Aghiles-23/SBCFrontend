@@ -19,6 +19,8 @@ import { motion } from "framer-motion";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import { Close } from "@mui/icons-material";
 import AutoDetails from "../Automobile/AutoDetails";
+import calculateRating from "./calculateRating";
+
 
 const AutreCardComponent = ({ item, theme }) => {
   const [clickedOffer, setclickedOffer] = useState({});
@@ -111,19 +113,19 @@ const AutreCardComponent = ({ item, theme }) => {
               }}
               // @ts-ignore
               image={`${import.meta.env.VITE_BASE_URL}${
-                item.attributes.SourceImage.data.attributes.url
+                item?.attributes?.SourceImage?.data?.attributes?.url
               }`}
               // image="/static/images/cards/contemplative-reptile.jpg"*/
-              title={`${item.attributes.Source}`} //{item.attributes.Title}
+              title={`${item?.attributes?.Source}`} //{item.attributes.Title}
             />
             <Rating
-              size={"small"}
-              precision={0.1}
-              name="read-only"
-              value={3}
-              readOnly
-              sx={{ ml: -1 }}
-            />
+            size={"small"}
+            precision={0.1}
+            name="read-only"
+            value={calculateRating(item?.attributes?.reviews?.data || "")}
+            readOnly
+            sx={{ ml: -1 }}
+          />
           </Box>
           <Box
             // className="border"
@@ -140,7 +142,7 @@ const AutreCardComponent = ({ item, theme }) => {
           >
             <CardHeader
               sx={{}}
-              title={`${item.attributes.Titre}`}
+              title={`${item?.attributes?.Titre}`}
               titleTypographyProps={{
                 fontFamily: "Acme",
                 fontWeight: 500, // Police en gras

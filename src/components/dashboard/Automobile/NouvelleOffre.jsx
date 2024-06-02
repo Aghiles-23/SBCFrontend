@@ -37,7 +37,7 @@ function NouvelleOffre({ categorie, onClose, onConfirm }) {
 
   useEffect(() => {
     setBankId(JSON.parse(Cookies.get("user")).id);
-    setImage(JSON.parse(Cookies.get("user")).image);
+    setImage(JSON.parse(Cookies.get("user")).image.id);
     console.log(JSON.parse(Cookies.get("user")));
   }, []);
 
@@ -72,6 +72,8 @@ function NouvelleOffre({ categorie, onClose, onConfirm }) {
       bank: bankId,
       SourceImage: image,
     };
+    console.log(66);
+    console.log(image);
 
     console.log(newData);
 

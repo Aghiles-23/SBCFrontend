@@ -27,7 +27,7 @@ export const storeBank = (data) => {
       email: data[0].attributes.email,
       bankName: data[0].attributes.Titre,
       avatar: data[0].attributes.BankImg.data.attributes.url,
-      image: data[0].attributes.BankImg.data.attributes,
+      image: data[0].attributes.BankImg.data,
       //    // avatar:data.user.avatar,
       //     //role:data.user.role,
       //     //jwt: data.jwt,

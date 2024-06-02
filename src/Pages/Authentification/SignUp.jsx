@@ -51,7 +51,10 @@ const Registration = () => {
 
   const handleFileChange2 = (event) => {
     const file = event.target.files[0];
+    console.log(1);
+    console.log(file);
     if (file) {
+      console.log(2);
       setImage(file);
       const imageUrl = URL.createObjectURL(file);
       setSelectedImage(imageUrl);
@@ -82,50 +85,59 @@ const Registration = () => {
 
     setRole(value);
   };
- const signUp = async () => {
-  try {
-    if (user.username && user.email && user.password) {
-      const formData = new FormData();
-      Object.keys(user).forEach((key) => {
-        formData.append(key, user[key]);
-      });
+  const signUp = async () => {
+    try {
+      if (user.username && user.email && user.password) {
+        const formData = new FormData();
+        Object.keys(user).forEach((key) => {
+          formData.append(key, user[key]);
+        });
 
-      // Vérifie si une image a été sélectionnée
-      if (selectedImage) {
-        const imageUrl = await uploadImage(selectedImage);
-        formData.append('profilePicture', imageUrl);
-      }
+        // Vérifie si une image a été sélectionnée
+        console.log(Image);
+        const imageUrl = await uploadImage(Image);
+        console.log(imageUrl);
+        formData.delete("profilePicture");
+        formData.append("avatar", imageUrl.id);
+        // Iterate over the formData entries
+        // @ts-ignore
+        for (let [key, value] of formData.entries()) {
+          console.log(`${key}: ${value}`);
+        }
 
-      const res = await axios.post(SignUpUrl, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+        const res = await axios.post(SignUpUrl, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        console.log(res);
+        console.log(4);
 
-      if (res) {
-        toast.success("Enregistré avec succès !", {
+
+        if (res) {
+          toast.success("Enregistré avec succès !", {
+            hideProgressBar: true,
+          });
+          setUser(initialUser);
+          navigate("/login");
+        }
+      } else {
+        toast.error("Veuillez remplir tous les champs", {
           hideProgressBar: true,
         });
-        setUser(initialUser);
-        navigate("/login");
       }
-    } else {
-      toast.error("Veuillez remplir tous les champs", {
-        hideProgressBar: true,
-      });
+    } catch (error) {
+      if (error.response && error.response.data) {
+        toast.error(error.response.data.error.message, {
+          hideProgressBar: true,
+        });
+      } else {
+        toast.error(error.message, {
+          hideProgressBar: true,
+        });
+      }
     }
-  } catch (error) {
-    if (error.response && error.response.data) {
-      toast.error(error.response.data.error.message, {
-        hideProgressBar: true,
-      });
-    } else {
-      toast.error(error.message, {
-        hideProgressBar: true,
-      });
-    }
-  }
-};
+  };
 
   const uploadImage = async (imageFile) => {
     try {
@@ -155,7 +167,13 @@ const Registration = () => {
   const signUpbank = async () => {
     //console.log(5);
     try {
-      if (bank.email && bank.Password && bank.WebSite && bank.Description && bank.Title) {
+      if (
+        bank.email &&
+        bank.Password &&
+        bank.WebSite &&
+        bank.Description &&
+        bank.Title
+      ) {
         const formData = new FormData();
         Object.keys(bank).forEach((key) => {
           formData.append(key, bank[key]);
@@ -239,7 +257,7 @@ const Registration = () => {
         <Grid container spacing={3}>
           {/* Colonne des champs existants */}
           <Grid item xs={1} md={1}>
-          <FormControl
+            <FormControl
               fullWidth
               margin="normal"
               sx={{ height: "50px", width: "270px" }}
@@ -303,7 +321,6 @@ const Registration = () => {
               }}
               sx={{ height: "15%", mb: 1, width: "500%" }}
             />
-            
           </Grid>
 
           {/* Colonne des champs conditionnels */}
@@ -372,10 +389,7 @@ const Registration = () => {
                     type="file"
                     hidden
                     name="profilePicture"
-                    value={
-                      role === "client" ? user.profilePicture : bank.BankImg
-                    }
-                    onChange={handleFileChange1}
+                    onChange={handleFileChange2}
                   />
                 </Button>
                 {selectedImage && (
@@ -408,7 +422,8 @@ const Registration = () => {
                     sx: { fontSize: "0.875rem" },
                   }}
                   sx={{ height: "15%", mb: 1, width: "65%" }}
-                /> <TextField
+                />{" "}
+                <TextField
                   label="Votre siteWeb"
                   type="text"
                   name="WebSite"

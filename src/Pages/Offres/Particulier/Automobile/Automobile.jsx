@@ -193,12 +193,12 @@ function Automobile() {
                       >
                         <CardMedia
                           sx={{
-                            height: { xs: 61, sm: 100, md: 100 },
+                            height: { xs: 61, sm: 100, md: "150px" },
                             display: "flex",
                             justifyContent: "center",
                             // height: 140,
                             cursor: "pointer",
-                            width: { xs: "66%", md: "85%" },
+                            width: { xs: "66%", md: "150px" },
                             backgroundSize: "cover", // Pour que l'image couvre entièrement la zone
                             backgroundPosition: "center",
                             mb: 2,

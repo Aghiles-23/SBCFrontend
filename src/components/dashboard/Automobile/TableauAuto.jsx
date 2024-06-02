@@ -27,8 +27,29 @@ function TableauAuto({
 
   const handleDelete = async () => {
     try {
+      let url = "http://localhost:1337/api/";
+      switch (categorie) {
+        case "Crédit automobile":
+          url = url + "credit-automobiles/";
+          break;
+  
+        case "Crédit moto":
+          url = url + "credit-motos/";
+          break;
+  
+        case "Crédit à la consommation":
+          url = url + "credit-consommations/";
+          break;
+  
+        case "Crédit immobilier":
+          url = url + "credit-immobiliers/";
+          break;
+  
+        default:
+          break;
+      }
       const response = await axios.delete(
-        "http://localhost:1337/api/credit-automobiles/" + selectedId
+        url+ selectedId
       );
       console.log(response);
 

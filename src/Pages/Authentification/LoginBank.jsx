@@ -155,13 +155,13 @@ const Login = ({ onLogin }) => {
           >
             Vous n&apos;avez pas de compte ?
           </Typography>
-          <Box sx={{ ml: "35%", mt: 0.8 ,mb:3}}>
-          <h4>
-          Cliquez{" "}
-          <Link className="text-xm text-vert  mb-6" to="/login">
-            ici
-          </Link>
-        </h4>
+          <Box sx={{ ml: "35%", mt: 0.8, mb: 3 }}>
+            <h4>
+              Cliquez{" "}
+              <Link className="text-xm text-vert  mb-6" to="/signup">
+                ici
+              </Link>
+            </h4>
           </Box>
         </form>
       </Box>
